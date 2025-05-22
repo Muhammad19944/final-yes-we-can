@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --container-width: 99.5rem; /* 1592px */
+
+  --color-green-50: #fbfff8;
+  --color-green-100: #c2e29f;
+  --color-green-300: #95cc57;
+  --color-green-500: #67b60e;
+
+  --color-greyscale-50: #f9f9fb;
+  --color-greyscale-100: #f4f4f6;
+  --color-greyscale-200: #eaebef;
+  --color-greyscale-300: #cbcdd6;
+  --color-greyscale-400: #b2b8c2;
+  --color-greyscale-500: #818a9c;
+  --color-greyscale-600: #5f6878;
+  --color-greyscale-700: #333d4c;
+  --color-greyscale-800: #0e1b2e;
+  --color-greyscale-900: #000c1f;
+
+  --color-warning-50: #fff9ea;
+  --color-warning-100: #ffecc8;
+  --color-warning-300: #ffd057;
+  --color-warning-500: #f3bf06;
+
+  --color-orange-50: #fff9ea;
+  --color-orange-100: #ffecc8;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #ffd057;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f3bf06;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+  --color-orange-950: #431407;
+
+  --color-info-50: #f0f6ff;
+  --color-info-100: #cde2ff;
+  --color-info-300: #3391e5;
+  --color-info-500: #0076de;
+
+  --color-info-50: #ffecec;
+  --color-info-100: #ffcfcf;
+  --color-info-300: #ff9090;
+  --color-info-500: #ff5757;
+  --color-info-600: #ff2200;
+}
+
+:root {
+  --ui-container: var(--container-width);
+}
