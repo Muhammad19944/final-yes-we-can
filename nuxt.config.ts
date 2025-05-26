@@ -1,7 +1,21 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  /**
+   * Modules
+   */
+  modules: ['@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/scripts', '@nuxt/test-utils', '@nuxt/content', '@nuxtjs/storybook'],
   devtools: { enabled: true },
+  /**
+   * Styles
+   */
+  css: ['~/assets/css/main.css'],
+  /**
+   * UI
+   */
+  ui: {
+    colorMode: false
+  },
+  compatibilityDate: '2024-11-01',
   /*
    * ESLint
    * */
@@ -13,12 +27,6 @@ export default defineNuxtConfig({
         commaDangle: 'never'
       }
     }
-  },
-  /**
-   * UI
-   */
-  ui: {
-    colorMode: false
   },
   /**
    * I18n
@@ -59,11 +67,10 @@ export default defineNuxtConfig({
     }
   },
   /**
-   * Styles
+   * Storybook
    */
-  css: ['~/assets/css/main.css'],
-  /**
-   * Modules
-   */
-  modules: ['@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/scripts', '@nuxt/test-utils', '@nuxt/content']
+  storybook: {
+    host: 'http://localhost:6006',
+    port: 6006
+  }
 })
