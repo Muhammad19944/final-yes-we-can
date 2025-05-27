@@ -4,6 +4,8 @@
 @theme {
   --container-width: 99.5rem; /* 1592px */
 
+  --primary-linear: 45.42deg, #35af07 -0.18%, #accd0f 92.29%;
+
   --color-green-50: #fbfff8;
   --color-green-100: #c2e29f;
   --color-green-300: #95cc57;

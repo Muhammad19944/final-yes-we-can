@@ -1,5 +1,4 @@
 export default defineNuxtRouteMiddleware((to) => {
-  console.log('Redirect middleware triggered')
   const localePath = useLocalePath()
   const removeSlash = to.fullPath.slice(1)
 

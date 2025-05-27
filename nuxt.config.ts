@@ -19,15 +19,15 @@ export default defineNuxtConfig({
   /*
    * ESLint
    * */
-  eslint: {
-    config: {
-      stylistic: {
-        indent: 'tab',
-        semi: false,
-        commaDangle: 'never'
-      }
-    }
-  },
+  // eslint: {
+  //   config: {
+  //     stylistic: {
+  //       indent: 'tab',
+  //       semi: false,
+  //       commaDangle: 'never'
+  //     }
+  //   }
+  // },
   /**
    * I18n
    */
