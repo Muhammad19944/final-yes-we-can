@@ -46,20 +46,13 @@
         </div>
 
         <div class="flex items-center justify-end gap-4 max-w-[496px] w-full">
-          <ui-avatar src="https://github.com/benjamincanac.png" />
+          <BaseAvatar src="https://github.com/benjamincanac.png" />
 
-          <!-- <ui-avatar-labeled
+          <BaseAvatarLabeled
             src="https://github.com/benjamincanac.png"
             label="Kalimbetov Dilmurod"
             sub-label="UX/UI dizayner, Product dizayner"
-          /> -->
-
-          <ui-heading
-            level="h7"
-            weight="medium"
-          >
-            Lorem, ipsum.
-          </ui-heading>
+          />
         </div>
       </div>
     </ui-container>

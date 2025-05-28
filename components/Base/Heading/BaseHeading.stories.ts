@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import Heading from '~/components/ui/heading/index.vue'
+import BaseHeading from '~/components/Base/Heading/BaseHeading.vue'
 
 const meta = {
   title: 'UI/Heading',
-  component: Heading,
+  component: BaseHeading,
   tags: ['autodocs'],
   argTypes: {
     text: {
@@ -25,10 +25,10 @@ const meta = {
       description: 'Heading font colors using tailwind classes'
     }
   }
-} satisfies Meta<typeof Heading>
+} satisfies Meta<typeof BaseHeading>
 
 export default meta
-type Story = StoryObj<typeof Heading>
+type Story = StoryObj<typeof BaseHeading>
 
 export const Types: Story = {
   args: {

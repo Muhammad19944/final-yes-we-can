@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import AvatarLabeled from '~/components/ui/avatar/labeled.vue'
+import BaseAvatar from '~/components/Base/Avatar/BaseAvatar.vue'
 
 const meta = {
-  title: 'UI/Avatar/Labeled',
-  component: AvatarLabeled,
+  title: 'Base/Avatar',
+  component: BaseAvatar,
   tags: ['autodocs'],
   argTypes: {
     as: {
@@ -39,25 +39,30 @@ const meta = {
       control: 'select',
       options: ['white', 'gradient'],
       description: 'Select background color of the avatar'
-    },
-    label: {
-      control: 'text',
-      description: 'Label text to display next to the avatar'
-    },
-    subLabel: {
-      control: 'text',
-      description: 'Sub-label text to display below the label'
     }
   }
-} satisfies Meta<typeof AvatarLabeled>
+} satisfies Meta<typeof BaseAvatar>
 
 export default meta
-type Story = StoryObj<typeof AvatarLabeled>
+type Story = StoryObj<typeof BaseAvatar>
 
-export const Default: Story = {
+export const Image: Story = {
+  args: {
+    src: 'https://github.com/benjamincanac.png'
+  }
+}
+
+export const Size: Story = {
   args: {
     src: 'https://github.com/benjamincanac.png',
-    label: 'Benjamin Canac',
-    subLabel: 'Software Engineer'
+    size: 'md'
+  }
+}
+
+export const Background: Story = {
+  args: {
+    background: 'gradient',
+    size: '2xl',
+    icon: 'solar:user-speak-rounded-bold'
   }
 }
