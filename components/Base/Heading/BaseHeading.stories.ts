@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import BaseHeading from '~/components/Base/Heading/BaseHeading.vue'
 
 const meta = {
-  title: 'UI/Heading',
+  title: 'Base/Heading',
   component: BaseHeading,
   tags: ['autodocs'],
   argTypes: {

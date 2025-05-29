@@ -48,11 +48,7 @@
         <div class="flex items-center justify-end gap-4 max-w-[496px] w-full">
           <BaseAvatar src="https://github.com/benjamincanac.png" />
 
-          <BaseAvatarLabeled
-            src="https://github.com/benjamincanac.png"
-            label="Kalimbetov Dilmurod"
-            sub-label="UX/UI dizayner, Product dizayner"
-          />
+          <BaseButton> Button </BaseButton>
         </div>
       </div>
     </ui-container>

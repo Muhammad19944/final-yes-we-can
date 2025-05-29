@@ -4,7 +4,7 @@ import BaseAvatarLabeled from '~/components/Base/Avatar/BaseAvatarLabeled.vue'
 import BaseHeading from '~/components/Base/Heading/BaseHeading.vue'
 
 const meta = {
-  title: 'Base/Avatar/Labeled',
+  title: 'Base/Avatar/BaseAvatarLabeled',
   component: BaseAvatarLabeled,
   tags: ['autodocs'],
   argTypes: {
@@ -92,7 +92,7 @@ export const WithSlots: Story = {
     },
     template: `
       <BaseAvatarLabeled v-bind="args">
-        <template v-slot:chip>
+        <template #chip>
           <div class="absolute -bottom-[3px] -right-[5px]">
             <BaseAvatar
               icon="solar:pen-bold"
@@ -102,11 +102,11 @@ export const WithSlots: Story = {
           </div>
         </template>
 
-        <template v-slot:label>
+        <template #label>
           <BaseHeading text="Odinayev Muhammad" level="h3" weight="extra" />
         </template>
 
-        <template v-slot:subLabel>
+        <template #subLabel>
           <BaseHeading text="Frontend developer" level="h8" weight="normal" />
         </template>
       </BaseAvatarLabeled>

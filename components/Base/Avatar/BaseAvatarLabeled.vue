@@ -24,6 +24,7 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
         :alt="alt"
         :icon="icon"
         :size="size"
+        :text="text"
         :custom-size="customSize || 56"
         :background="background"
       />
