@@ -1,10 +1,4 @@
-<script lang="ts" setup>
-// const { locale } = useI18n()
-
-// onMounted(() => {
-//   navigateTo(`/${locale.value}/jobs`)
-// })
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="layout-wrapper flex flex-col min-h-[100vh] bg-zinc-50">

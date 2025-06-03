@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   /**
    * Modules @nuxtjs/i18n
    */
-  modules: ['@nuxtjs/storybook', '@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/scripts', '@nuxt/test-utils', '@nuxt/content'],
+  modules: ['@nuxtjs/storybook', '@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxt/scripts', '@nuxt/test-utils/module', '@nuxt/content'],
   /**
    * Styles
    */
