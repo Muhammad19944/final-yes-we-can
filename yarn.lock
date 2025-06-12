@@ -3236,6 +3236,19 @@
   dependencies:
     tinyspy "^3.0.2"
 
+"@vitest/ui@3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@vitest/ui/-/ui-3.1.4.tgz#ece30f41330bd26f656f737cda57c35b5121175b"
+  integrity sha512-CFc2Bpb3sz4Sdt53kdNGq+qZKLftBwX4qZLC03CBUc0N1LJrOoL0ZeK0oq/708mtnpwccL0BZCY9d1WuiBSr7Q==
+  dependencies:
+    "@vitest/utils" "3.1.4"
+    fflate "^0.8.2"
+    flatted "^3.3.3"
+    pathe "^2.0.3"
+    sirv "^3.0.1"
+    tinyglobby "^0.2.13"
+    tinyrainbow "^2.0.0"
+
 "@vitest/utils@2.0.5":
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-2.0.5.tgz#6f8307a4b6bc6ceb9270007f73c67c915944e926"
@@ -5956,6 +5969,11 @@ fetch-blob@^3.1.2, fetch-blob@^3.1.4:
     node-domexception "^1.0.0"
     web-streams-polyfill "^3.0.3"
 
+fflate@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.8.2.tgz#fc8631f5347812ad6028bbe4a2308b2792aa1dea"
+  integrity sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==
+
 file-entry-cache@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-8.0.0.tgz#7787bddcf1131bffb92636c69457bbc0edd6d81f"
@@ -6040,7 +6058,7 @@ flat@^6.0.1:
   resolved "https://registry.yarnpkg.com/flat/-/flat-6.0.1.tgz#09070cf918293b401577f20843edeadf4d3e8755"
   integrity sha512-/3FfIa8mbrg3xE7+wAhWeV+bd7L2Mof+xtZb5dRDKZ+wDvYJK4WDYeIOuOhre5Yv5aQObZrlbRmk3RTSiuQBtw==
 
-flatted@^3.2.9:
+flatted@^3.2.9, flatted@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.3.tgz#67c8fad95454a7c7abebf74bb78ee74a44023358"
   integrity sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==

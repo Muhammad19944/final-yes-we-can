@@ -1,5 +1,5 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import { describe, it, expect } from 'vitest'
+import { it, expect } from 'vitest'
 import BaseAvatar from './BaseAvatar.vue'
 import type { SizeType } from '~/types/utils'
 
@@ -15,77 +15,75 @@ const sizes: Record<SizeType, string> = {
   '3xl': 'size-12'
 }
 
-describe('BaseAvatar', () => {
-  it('component mounted', async () => {
-    const wrapper = await mountSuspended(BaseAvatar)
+it('should render component mounted', async () => {
+  const wrapper = await mountSuspended(BaseAvatar)
 
-    expect(wrapper.exists()).toBeTruthy()
+  expect(wrapper.exists()).toBeTruthy()
+})
+
+it('should render src props', async () => {
+  const src = 'https://github.com/benjamincanac.png'
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      src
+    }
   })
 
-  it('render src props', async () => {
-    const src = 'https://github.com/benjamincanac.png'
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        src
-      }
-    })
+  expect(wrapper.find('img').attributes('src')).toBe(src)
+})
 
-    expect(wrapper.find('img').attributes('src')).toBe(src)
+it('should render icon props', async () => {
+  const icon = 'i-mdi:account'
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      icon
+    }
   })
 
-  it('render icon props', async () => {
-    const icon = 'i-mdi:account'
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        icon
-      }
-    })
+  expect(wrapper.html()).toContain(icon)
+})
 
-    expect(wrapper.html()).toContain(icon)
+it('should render text props', async () => {
+  const text = 'Muhammad'
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      text
+    }
   })
 
-  it('render text props', async () => {
-    const text = 'Muhammad'
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        text
-      }
-    })
+  expect(wrapper.html()).toContain(text)
+})
 
-    expect(wrapper.html()).toContain(text)
+it('should render size props', async () => {
+  const size: SizeType = '2xl'
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      size
+    }
   })
 
-  it('render size props', async () => {
-    const size: SizeType = '2xl'
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        size
-      }
-    })
+  expect(wrapper.classes()).toContain(sizes[size])
+})
 
-    expect(wrapper.classes()).toContain(sizes[size])
+it('should render customSize props', async () => {
+  const customSize = 50
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      customSize
+    }
   })
 
-  it('render customSize props', async () => {
-    const customSize = 50
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        customSize
-      }
-    })
+  expect(wrapper.attributes('style')).toContain(`width: ${customSize}px`)
+  expect(wrapper.attributes('style')).toContain(`height: ${customSize}px`)
+})
 
-    expect(wrapper.attributes('style')).toContain(`width: ${customSize}px`)
-    expect(wrapper.attributes('style')).toContain(`height: ${customSize}px`)
+it('should render background props', async () => {
+  const background = 'gradient'
+  const wrapper = await mountSuspended(BaseAvatar, {
+    props: {
+      background
+    }
   })
 
-  it('render background props', async () => {
-    const background = 'gradient'
-    const wrapper = await mountSuspended(BaseAvatar, {
-      props: {
-        background
-      }
-    })
-
-    expect(wrapper.classes()).toContain('bg-linear-[var(--primary-linear)]')
-  })
+  expect(wrapper.classes()).toContain('bg-linear-[var(--primary-linear)]')
 })
