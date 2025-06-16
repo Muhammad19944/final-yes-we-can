@@ -47,8 +47,6 @@
 
         <div class="flex items-center justify-end gap-4 max-w-[496px] w-full">
           <BaseAvatar src="https://github.com/benjamincanac.png" />
-
-          <BaseButton> Button </BaseButton>
         </div>
       </div>
     </ui-container>
