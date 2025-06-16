@@ -2,7 +2,14 @@
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
-type CustomColorsType = 'greyscale'
+const customColors = ['greyscale'] as const
+type CustomColorsType = (typeof customColors)[number]
+
+const customSizes = ['2xl', '3xl'] as const
+type CustomSizesType = (typeof customSizes)[number]
+
+type LibSizesType = Exclude<SizeType, '3xs' | '2xs' | CustomSizesType>
+type OwnSizesType = LibSizesType | CustomSizesType
 
 export interface ButtonEntity {
   as?: string
@@ -11,7 +18,7 @@ export interface ButtonEntity {
   activeColor?: ColorType | CustomColorsType
   variant?: VariantType
   activeVariant?: VariantType
-  size?: Exclude<SizeType, '3xs' | '2xs'>
+  size?: OwnSizesType
   square?: boolean
   block?: boolean
   loadingAuto?: boolean
@@ -28,9 +35,8 @@ export interface ButtonEntity {
   active?: boolean
   target?: null | '_blank' | '_parent' | '_self' | '_top' | (string & {})
   background?: 'white' | 'gradient'
-  rounded?: boolean | Exclude<SizeType, '3xs' | '2xs'>
+  rounded?: boolean | OwnSizesType
 }
-type LibSizeType = Exclude<SizeType, '3xs' | '2xs' | '2xl' | '3xl'>
 </script>
 
 <script setup lang="ts">
@@ -42,78 +48,26 @@ const props = withDefaults(defineProps<ButtonEntity>(), {
   type: 'button'
 })
 
-const customColors: CustomColorsType[] = ['greyscale']
-
 const customColorsClass: Record<CustomColorsType, string> = {
   greyscale: 'bg-[var(--color-greyscale-100)] text-[var(--color-greyscale-900)] hover:bg-[var(--color-greyscale-200)]'
 }
 
-const isCustomColors = (color: ColorType | CustomColorsType): color is CustomColorsType => {
-  return customColors.includes(color as CustomColorsType)
-}
-
-const defineColors = computed(() => {
-  if (isCustomColors(props.color)) {
-    return {
-      lib: 'primary' as ColorType,
-      custom: customColorsClass[props.color]
-    }
-  }
-
-  return {
-    lib: props.color,
-    custom: null
-  }
-})
-
-const DEFAULT_LIB_SIZE: LibSizeType = 'md'
-
-const buttonSizeClass: Record<'2xl' | '3xl', string> = {
+const customSizesClass: Record<CustomSizesType, string> = {
   '2xl': 'px-3.5 py-2.5 text-base gap-2',
   '3xl': 'p-4 text-base gap-2'
 }
 
-const isLibrarySize = (size: string): size is LibSizeType => {
-  return ['xs', 'sm', 'md', 'lg', 'xl'].includes(size)
+const sizeIconMap: Record<CustomSizesType, string> = {
+  '2xl': 'size-5',
+  '3xl': 'size-7'
 }
 
-const defineButtonSize = computed(() => {
-  if (isLibrarySize(props.size)) {
-    return {
-      lib: props.size,
-      custom: ''
-    }
-  }
+const squareSizeMap: Record<CustomSizesType, string> = {
+  '2xl': 'p-3',
+  '3xl': 'p-3.5'
+}
 
-  return {
-    lib: DEFAULT_LIB_SIZE,
-    custom: buttonSizeClass[props.size as '2xl' | '3xl'] ?? ''
-  }
-})
-
-const defineIconSize = computed(() => {
-  const map: Record<string, string | null> = {
-    '2xl': 'size-5',
-    '3xl': 'size-7'
-  }
-
-  return map[props.size as string] ?? null
-})
-
-const defineSquare = computed(() => {
-  if (props.square) {
-    const map: Record<string, string | null> = {
-      '2xl': 'p-3',
-      '3xl': 'p-3.5'
-    }
-
-    return map[props.size as string] ?? null
-  }
-
-  return null
-})
-
-const roundedClass: Record<Exclude<SizeType, '3xs' | '2xs'>, string> = {
+const roundedClassMap: Record<OwnSizesType, string> = {
   xs: 'rounded',
   sm: 'rounded',
   md: 'rounded-lg',
@@ -123,23 +77,35 @@ const roundedClass: Record<Exclude<SizeType, '3xs' | '2xs'>, string> = {
   '3xl': 'rounded-xl'
 }
 
+const isCustomColor = (color: unknown): color is CustomColorsType => customColors.includes(color as CustomColorsType)
+
+const isCustomSize = (size: unknown): size is CustomSizesType => customSizes.includes(size as CustomSizesType)
+
+const defineColors = computed(() => ({
+  lib: isCustomColor(props.color) ? 'primary' : props.color,
+  custom: isCustomColor(props.color) ? customColorsClass[props.color] : null
+}))
+
+const defineSizes = computed(() => ({
+  lib: isCustomSize(props.size) ? 'md' : props.size,
+  custom: isCustomSize(props.size) ? customSizesClass[props.size] : null
+}))
+
+const defineIconSize = computed(() => (isCustomSize(props.size) ? sizeIconMap[props.size] : null))
+
+const defineSquare = computed(() => (props.square && isCustomSize(props.size) ? squareSizeMap[props.size] : null))
+
 const defineRounded = computed(() => {
-  if (!props.rounded) {
-    return ''
-  } else if (typeof props.rounded === 'boolean') {
-    return 'rounded-[80px]'
-  } else {
-    return roundedClass[props.rounded]
-  }
+  if (!props.rounded) return ''
+  if (typeof props.rounded === 'boolean') return 'rounded-[80px]'
+  return roundedClassMap[props.rounded]
 })
 
-const defineBaseClass = computed(() => {
-  return [
-    defineRounded.value,
-    props.background === 'white' ? 'bg-white text-greyscale-900 hover:text-white' : null,
-    props.background === 'gradient' ? 'bg-linear-[var(--primary-linear)] text-white' : null
-  ]
-})
+const defineBaseClass = computed(() => [
+  defineRounded.value,
+  props.background === 'white' && 'bg-white text-greyscale-900 hover:text-white',
+  props.background === 'gradient' && 'bg-linear-[var(--primary-linear)] text-white'
+])
 </script>
 
 <template>
@@ -150,7 +116,7 @@ const defineBaseClass = computed(() => {
     :active-color="defineColors.lib"
     :variant="variant"
     :active-variant="activeVariant"
-    :size="defineButtonSize.lib"
+    :size="defineSizes.lib"
     :square="square"
     :block="block"
     :loading-auto="loadingAuto"
@@ -167,7 +133,7 @@ const defineBaseClass = computed(() => {
     :active="active"
     :target="target"
     :ui="{
-      base: [defineBaseClass, defineColors.custom, defineButtonSize.custom, defineSquare],
+      base: [defineBaseClass, defineColors.custom, defineSizes.custom, defineSquare],
       leadingIcon: [defineIconSize]
     }"
   >
