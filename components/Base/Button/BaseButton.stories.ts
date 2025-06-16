@@ -16,12 +16,12 @@ const meta = {
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral'],
+      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale'],
       description: 'Color variant of the button'
     },
     activeColor: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral'],
+      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale'],
       description: 'Color when button is active'
     },
     variant: {

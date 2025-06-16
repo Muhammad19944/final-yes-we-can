@@ -2,11 +2,13 @@
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
+type CustomColorsType = 'greyscale'
+
 export interface ButtonEntity {
   as?: string
   label?: string
-  color?: ColorType
-  activeColor?: ColorType
+  color?: ColorType | CustomColorsType
+  activeColor?: ColorType | CustomColorsType
   variant?: VariantType
   activeVariant?: VariantType
   size?: Exclude<SizeType, '3xs' | '2xs'>
@@ -28,7 +30,6 @@ export interface ButtonEntity {
   background?: 'white' | 'gradient'
   rounded?: boolean | Exclude<SizeType, '3xs' | '2xs'>
 }
-
 type LibSizeType = Exclude<SizeType, '3xs' | '2xs' | '2xl' | '3xl'>
 </script>
 
@@ -40,6 +41,31 @@ const props = withDefaults(defineProps<ButtonEntity>(), {
   size: 'md',
   type: 'button'
 })
+
+const customColors: CustomColorsType[] = ['greyscale']
+
+const customColorsClass: Record<CustomColorsType, string> = {
+  greyscale: 'bg-[var(--color-greyscale-100)] text-[var(--color-greyscale-900)] hover:bg-[var(--color-greyscale-200)]'
+}
+
+const isCustomColors = (color: ColorType | CustomColorsType): color is CustomColorsType => {
+  return customColors.includes(color as CustomColorsType)
+}
+
+const defineColors = computed(() => {
+  if (isCustomColors(props.color)) {
+    return {
+      lib: 'primary' as ColorType,
+      custom: customColorsClass[props.color]
+    }
+  }
+
+  return {
+    lib: props.color,
+    custom: null
+  }
+})
+
 const DEFAULT_LIB_SIZE: LibSizeType = 'md'
 
 const buttonSizeClass: Record<'2xl' | '3xl', string> = {
@@ -120,8 +146,8 @@ const defineBaseClass = computed(() => {
   <UButton
     :as="as"
     :label="label"
-    :color="color"
-    :active-color="activeColor"
+    :color="defineColors.lib"
+    :active-color="defineColors.lib"
     :variant="variant"
     :active-variant="activeVariant"
     :size="defineButtonSize.lib"
@@ -141,7 +167,7 @@ const defineBaseClass = computed(() => {
     :active="active"
     :target="target"
     :ui="{
-      base: [defineBaseClass, defineButtonSize.custom, defineSquare],
+      base: [defineBaseClass, defineColors.custom, defineButtonSize.custom, defineSquare],
       leadingIcon: [defineIconSize]
     }"
   >
