@@ -2,8 +2,9 @@
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
-const customColors = ['greyscale'] as const
+const customColors = ['greyscale', 'white', 'gradient'] as const
 type CustomColorsType = (typeof customColors)[number]
+type OwnColorsType = ColorType | CustomColorsType
 
 const customSizes = ['2xl', '3xl'] as const
 type CustomSizesType = (typeof customSizes)[number]
@@ -34,7 +35,6 @@ export interface ButtonEntity {
   disabled?: boolean
   active?: boolean
   target?: null | '_blank' | '_parent' | '_self' | '_top' | (string & {})
-  background?: 'white' | 'gradient'
   rounded?: boolean | OwnSizesType
 }
 </script>
@@ -49,7 +49,9 @@ const props = withDefaults(defineProps<ButtonEntity>(), {
 })
 
 const customColorsClass: Record<CustomColorsType, string> = {
-  greyscale: 'bg-[var(--color-greyscale-100)] text-[var(--color-greyscale-900)] hover:bg-[var(--color-greyscale-200)]'
+  greyscale: 'bg-[var(--color-greyscale-100)] text-[var(--color-greyscale-900)] hover:bg-[var(--color-greyscale-200)]',
+  white: 'bg-white text-greyscale-900 hover:text-white',
+  gradient: 'bg-linear-[var(--primary-linear)] text-white'
 }
 
 const customSizesClass: Record<CustomSizesType, string> = {
@@ -77,9 +79,9 @@ const roundedClassMap: Record<OwnSizesType, string> = {
   '3xl': 'rounded-xl'
 }
 
-const isCustomColor = (color: unknown): color is CustomColorsType => customColors.includes(color as CustomColorsType)
+const isCustomColor = (color: OwnColorsType): color is CustomColorsType => customColors.includes(color as CustomColorsType)
 
-const isCustomSize = (size: unknown): size is CustomSizesType => customSizes.includes(size as CustomSizesType)
+const isCustomSize = (size: OwnSizesType): size is CustomSizesType => customSizes.includes(size as CustomSizesType)
 
 const defineColors = computed(() => ({
   lib: isCustomColor(props.color) ? 'primary' : props.color,
@@ -100,12 +102,6 @@ const defineRounded = computed(() => {
   if (typeof props.rounded === 'boolean') return 'rounded-[80px]'
   return roundedClassMap[props.rounded]
 })
-
-const defineBaseClass = computed(() => [
-  defineRounded.value,
-  props.background === 'white' && 'bg-white text-greyscale-900 hover:text-white',
-  props.background === 'gradient' && 'bg-linear-[var(--primary-linear)] text-white'
-])
 </script>
 
 <template>
@@ -133,7 +129,7 @@ const defineBaseClass = computed(() => [
     :active="active"
     :target="target"
     :ui="{
-      base: [defineBaseClass, defineColors.custom, defineSizes.custom, defineSquare],
+      base: [defineColors.custom, defineSizes.custom, defineRounded, defineSquare],
       leadingIcon: [defineIconSize]
     }"
   >

@@ -16,12 +16,12 @@ const meta = {
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale'],
+      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale', 'white', 'gradient'],
       description: 'Color variant of the button'
     },
     activeColor: {
       control: 'select',
-      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale'],
+      options: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'neutral', 'greyscale', 'white', 'gradient'],
       description: 'Color when button is active'
     },
     variant: {
@@ -100,11 +100,6 @@ const meta = {
       control: 'text',
       description: 'The target attribute for the link, e.g., "_blank" for opening in a new tab'
     },
-    background: {
-      control: 'select',
-      options: ['white', 'gradient'],
-      description: 'Select background color of the avatar'
-    },
     rounded: {
       control: 'select',
       options: [true, false, 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'],
@@ -173,9 +168,9 @@ export const WithLoadingAuto: Story = {
     `
   }),
   args: {
-    label: 'Auth loading button',
+    label: 'Auto loading button',
     icon: 'i-heroicons-lock-closed',
-    background: 'gradient'
+    color: 'gradient'
   }
 }
 
