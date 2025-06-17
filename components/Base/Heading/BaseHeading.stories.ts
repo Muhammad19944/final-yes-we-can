@@ -30,7 +30,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof BaseHeading>
 
-export const Types: Story = {
+export const Default: Story = {
   args: {
     text: 'Lorem ipsum',
     level: 'h9',
