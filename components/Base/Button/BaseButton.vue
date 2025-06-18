@@ -60,12 +60,12 @@ const customSizesClass: Record<CustomSizesType, string> = {
 }
 
 const sizeIconMap: Record<CustomSizesType, string> = {
-  '2xl': 'size-5',
+  '2xl': 'size-6',
   '3xl': 'size-7'
 }
 
 const squareSizeMap: Record<CustomSizesType, string> = {
-  '2xl': 'p-3',
+  '2xl': 'p-2.5',
   '3xl': 'p-3.5'
 }
 
