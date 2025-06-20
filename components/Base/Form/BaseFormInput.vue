@@ -4,7 +4,7 @@ import { useRounded } from '~/composables/useRounded'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 /**
- * The Nuxt UI Button component supports size
+ * The Nuxt UI Input component supports size
  * prop values: 'xs', 'sm', 'md', 'lg', and 'xl'.
  * Here, we extend the size prop by adding custom
  * values '2xl' and '3xl' to support additional styling options.
@@ -84,7 +84,6 @@ const props = withDefaults(defineProps<FormInputEntity>(), {
   type: 'text',
   color: 'primary',
   variant: 'subtle',
-  size: 'xl',
   autocomplete: 'off',
   autofocusDelay: 0,
   rounded: 'xl' as const
