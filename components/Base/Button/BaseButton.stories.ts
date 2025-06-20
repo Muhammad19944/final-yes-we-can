@@ -170,7 +170,7 @@ export const WithLoadingAuto: Story = {
   args: {
     label: 'Auto loading button',
     icon: 'i-heroicons-lock-closed',
-    color: 'gradient'
+    color: 'error'
   }
 }
 
