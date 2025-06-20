@@ -1,12 +1,19 @@
 <script lang="ts">
+import { useExtendProps } from '~/composables/useExtendProps'
+import { useRounded } from '~/composables/useRounded'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
-
+/**
+ * The Nuxt UI Button component supports size
+ * prop values: 'xs', 'sm', 'md', 'lg', and 'xl'.
+ * Here, we extend the size prop by adding custom
+ * values '2xl' and '3xl' to support additional styling options.
+ */
 const customSizes = ['2xl', '3xl'] as const
 type CustomSizesType = (typeof customSizes)[number]
 
-type LibSizesType = Exclude<SizeType, '3xs' | '2xs' | CustomSizesType>
-type OwnSizesType = LibSizesType | CustomSizesType
+type UiSizesType = Exclude<SizeType, '3xs' | '2xs' | CustomSizesType>
+type ExtendSizesType = UiSizesType | CustomSizesType
 
 export interface FormInputEntity {
   as?: string
@@ -39,7 +46,7 @@ export interface FormInputEntity {
   placeholder?: string
   color?: ColorType
   variant?: Exclude<VariantType, 'link' | 'solid'> | 'none'
-  size?: OwnSizesType
+  size?: ExtendSizesType
   required?: boolean
   autocomplete?: string
   autofocus?: boolean
@@ -55,7 +62,7 @@ export interface FormInputEntity {
   loading?: boolean
   loadingIcon?: string
   modelValue?: null | string | number
-  rounded?: boolean | OwnSizesType
+  rounded?: boolean | ExtendSizesType
   ui?: {
     root?: string | string[]
     base?: string | string[]
@@ -83,80 +90,87 @@ const props = withDefaults(defineProps<FormInputEntity>(), {
   rounded: 'xl' as const
 })
 
-const customSizesClass: Record<CustomSizesType, string> = {
-  '2xl': 'px-3.5 py-2.5 text-base',
-  '3xl': 'p-4 text-base placeholder:text-lg'
-}
+const { defineExtend: defineSize } = useExtendProps<CustomSizesType, ExtendSizesType, UiSizesType>(
+  customSizes,
+  computed(() => props.size),
+  'md'
+)
 
-const roundedClassMap: Record<OwnSizesType, string> = {
-  xs: 'rounded',
-  sm: 'rounded',
-  md: 'rounded-lg',
-  lg: 'rounded-lg',
-  xl: 'rounded-xl',
-  '2xl': 'rounded-xl',
-  '3xl': 'rounded-xl'
-}
-
-const sizeIconMap: Record<CustomSizesType, string> = {
-  '2xl': 'size-6',
-  '3xl': 'size-7'
-}
-
-const leadingMap: Record<CustomSizesType, string> = {
-  '2xl': 'ps-3',
-  '3xl': 'ps-4'
-}
-
-const trailingMap: Record<CustomSizesType, string> = {
-  '2xl': 'pe-3',
-  '3xl': 'pe-4'
-}
-
-const leadingPaddingMap: Record<CustomSizesType, string> = {
-  '2xl': 'ps-11',
-  '3xl': 'ps-13'
-}
-
-const trailingPaddingMap: Record<CustomSizesType, string> = {
-  '2xl': 'pe-11',
-  '3xl': 'pe-13'
-}
-
-const isCustomSize = (size: OwnSizesType): size is CustomSizesType => customSizes.includes(size as CustomSizesType)
-
-const defineSizes = computed(() => ({
-  lib: isCustomSize(props.size) ? 'md' : props.size,
-  custom: isCustomSize(props.size) ? customSizesClass[props.size] : null
-}))
-
-const defineRounded = computed(() => {
-  if (!props.rounded) return ''
-  if (typeof props.rounded === 'boolean') return 'rounded-[80px]'
-  return roundedClassMap[props.rounded]
+const defineExtendSize = computed(() => {
+  switch (defineSize.value.extend) {
+    case '2xl':
+      return 'px-3.5 py-2.5 text-base'
+    case '3xl':
+      return 'p-4 text-base placeholder:text-lg'
+    default:
+      return ''
+  }
 })
 
-const defineIconSize = computed(() => (isCustomSize(props.size) ? sizeIconMap[props.size] : null))
+const defineExtendIconSize = computed(() => {
+  switch (defineSize.value.extend) {
+    case '2xl':
+      return 'size-6'
+    case '3xl':
+      return 'size-7'
+    default:
+      return ''
+  }
+})
 
-const defineLeading = computed(() => (isCustomSize(props.size) ? leadingMap[props.size] : null))
+const defineExtendLeading = computed(() => {
+  switch (defineSize.value.extend) {
+    case '2xl':
+      return 'ps-3'
+    case '3xl':
+      return 'ps-4'
+    default:
+      return ''
+  }
+})
 
-const defineTrailing = computed(() => (isCustomSize(props.size) ? trailingMap[props.size] : null))
+const defineExtendTrailing = computed(() => {
+  switch (defineSize.value.extend) {
+    case '2xl':
+      return 'pe-3'
+    case '3xl':
+      return 'pe-4'
+    default:
+      return ''
+  }
+})
 
-const defineLeadingPadding = computed(() => {
+const defineExtendLeadingPadding = computed(() => {
   if ((props.icon && !props.trailing) || props.leading || props.leadingIcon) {
-    return isCustomSize(props.size) ? leadingPaddingMap[props.size] : null
+    switch (defineSize.value.extend) {
+      case '2xl':
+        return 'ps-11'
+      case '3xl':
+        return 'ps-13'
+      default:
+        return ''
+    }
   }
 
   return null
 })
 
-const defineTrailingPadding = computed(() => {
+const defineExtendTrailingPadding = computed(() => {
   if ((props.icon && !props.leading) || props.trailing || props.trailingIcon) {
-    return isCustomSize(props.size) ? trailingPaddingMap[props.size] : null
+    switch (defineSize.value.extend) {
+      case '2xl':
+        return 'pe-11'
+      case '3xl':
+        return 'pe-13'
+      default:
+        return ''
+    }
   }
 
   return null
 })
+
+const { defineRounded } = useRounded(computed(() => props.rounded))
 
 const model = useModel(props, 'modelValue')
 </script>
@@ -171,7 +185,7 @@ const model = useModel(props, 'modelValue')
     :placeholder="placeholder"
     :color="color"
     :variant="variant"
-    :size="defineSizes.lib"
+    :size="defineSize.ui"
     :required="required"
     :autocomplete="autocomplete"
     :autofocus="autofocus"
@@ -187,11 +201,11 @@ const model = useModel(props, 'modelValue')
     :loading="loading"
     :loading-icon="loadingIcon"
     :ui="{
-      base: [defineSizes.custom, defineRounded, defineLeadingPadding, defineTrailingPadding, ui?.base],
-      leading: [defineLeading, ui?.leading],
-      trailing: [defineTrailing, ui?.trailing],
-      leadingIcon: [defineIconSize, ui?.leadingIcon],
-      trailingIcon: [defineIconSize, ui?.trailingIcon]
+      base: [defineExtendSize, defineRounded, defineExtendLeadingPadding, defineExtendTrailingPadding, ui?.base],
+      leading: [defineExtendLeading, ui?.leading],
+      trailing: [defineExtendTrailing, ui?.trailing],
+      leadingIcon: [defineExtendIconSize, ui?.leadingIcon],
+      trailingIcon: [defineExtendIconSize, ui?.trailingIcon]
     }"
   >
     <template #default>
