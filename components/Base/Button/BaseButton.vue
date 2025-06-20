@@ -1,6 +1,5 @@
 <script lang="ts">
-import { useExtendSize } from '~/composables/useExtendSize'
-import { useExtendColor } from '~/composables/useExtendColor'
+import { useExtendProps } from '~/composables/useExtendProps'
 import { useRounded } from '~/composables/useRounded'
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
@@ -65,7 +64,7 @@ const props = withDefaults(defineProps<ButtonEntity>(), {
   type: 'button'
 })
 
-const { defineColor } = useExtendColor<CustomColorsType, ExtendColorsType, UiColorsType>(
+const { defineExtend: defineColor } = useExtendProps<CustomColorsType, ExtendColorsType, UiColorsType>(
   customColors,
   computed(() => props.color),
   'primary'
@@ -84,7 +83,7 @@ const defineExtendColor = computed(() => {
   }
 })
 
-const { defineSize } = useExtendSize<CustomSizesType, ExtendSizesType, UiSizesType>(
+const { defineExtend: defineSize } = useExtendProps<CustomSizesType, ExtendSizesType, UiSizesType>(
   customSizes,
   computed(() => props.size),
   'md'
