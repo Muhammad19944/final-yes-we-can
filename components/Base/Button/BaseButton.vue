@@ -31,8 +31,8 @@ type ExtendSizesType = UiSizesType | CustomSizesType
 export interface ButtonEntity {
   as?: string
   label?: string
-  color?: UiColorsType
-  activeColor?: UiColorsType
+  color?: ExtendColorsType
+  activeColor?: ExtendColorsType
   variant?: VariantType
   activeVariant?: VariantType
   size?: ExtendSizesType

@@ -13,6 +13,17 @@ export default defineNuxtConfig({
    */
   css: ['~/assets/css/main.css'],
   /**
+   * Icons
+   */
+  icon: {
+    customCollections: [
+      {
+        prefix: 'ywc',
+        dir: './assets/icons'
+      }
+    ]
+  },
+  /**
    * UI
    */
   ui: {
