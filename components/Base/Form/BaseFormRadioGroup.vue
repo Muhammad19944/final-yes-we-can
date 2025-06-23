@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { AcceptableValue, SizeType, ColorType, RadioVariantType, OrientationType, IndicatorType } from '~/types/utils'
 
+// Base interface for each radio group item
 export interface BaseFormRadioGroupItemEntity {
   label: string
   description?: string
@@ -21,13 +22,14 @@ export interface BaseFormRadioGroupItemEntity {
     description?: string | string[]
   }
 }
+
+// Base interface for the radio group component
 export interface BaseFormRadioGroupEntity {
   as?: string
   legend?: string
   valueKey?: string
   labelKey?: string
   descriptionKey?: string
-  items?: BaseFormRadioGroupItemEntity[]
   size?: Exclude<SizeType, '3xs' | '2xs' | '2xl' | '3xl'>
   variant?: RadioVariantType
   color?: ColorType
@@ -51,13 +53,12 @@ export interface BaseFormRadioGroupEntity {
     label?: string | string[]
     description?: string | string[]
   }
-  // Custom field for rendering in storybook slots table (it needs if interface keys and slot keys are equal)
   legendSlot?: object
 }
 </script>
 
-<script setup lang="ts">
-const props = withDefaults(defineProps<BaseFormRadioGroupEntity>(), {
+<script setup lang="ts" generic="T extends BaseFormRadioGroupItemEntity = BaseFormRadioGroupItemEntity">
+const props = withDefaults(defineProps<BaseFormRadioGroupEntity & { items?: T[] }>(), {
   as: 'div',
   valueKey: 'value',
   labelKey: 'label',
@@ -68,10 +69,12 @@ const props = withDefaults(defineProps<BaseFormRadioGroupEntity>(), {
   orientation: 'vertical',
   indicator: 'start'
 })
+
 const emit = defineEmits<{
   (e: 'change', payload: Event): void
   (e: 'update:modelValue', payload: AcceptableValue): void
 }>()
+
 const model = useModel(props, 'modelValue')
 </script>
 
