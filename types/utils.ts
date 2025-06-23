@@ -14,3 +14,5 @@ export type RadioVariantType = 'card' | 'list' | 'table'
 export type OrientationType = 'horizontal' | 'vertical'
 
 export type IndicatorType = 'start' | 'end' | 'hidden'
+
+export type BorderTypes = 'solid' | 'dashed' | 'dotted'
