@@ -50,6 +50,9 @@
   --color-critic-300: #ff9090;
   --color-critic-500: #ff5757;
   --color-critic-600: #ff2200;
+
+  --shadow-10: 0px 1px 2px 0px #0000000f;
+  --shadow-20: 0px 1px 2px 0px #030c2b0f, 0px 2px 4px 0px #161c270a;
 }
 
 :root {

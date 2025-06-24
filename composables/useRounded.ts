@@ -24,8 +24,8 @@ export const useRounded = (rounded: Ref<boolean | SizeType | undefined>) => {
     xl: 'rounded-xl',
     '3xs': 'rounded',
     '2xs': 'rounded',
-    '2xl': 'rounded-xl',
-    '3xl': 'rounded-xl'
+    '2xl': 'rounded-2xl',
+    '3xl': 'rounded-3xl'
   }
 
   const defineRounded = computed(() => {
