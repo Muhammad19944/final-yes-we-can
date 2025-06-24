@@ -7,6 +7,7 @@
   --primary-linear: 45.42deg, #35af07 -0.18%, #accd0f 92.29%;
 
   --color-green-50: #fbfff8;
+  --color-green-75: #e7f8d4;
   --color-green-100: #c2e29f;
   --color-green-300: #95cc57;
   --color-green-500: #67b60e;
@@ -44,11 +45,11 @@
   --color-info-300: #3391e5;
   --color-info-500: #0076de;
 
-  --color-info-50: #ffecec;
-  --color-info-100: #ffcfcf;
-  --color-info-300: #ff9090;
-  --color-info-500: #ff5757;
-  --color-info-600: #ff2200;
+  --color-critic-50: #ffecec;
+  --color-critic-100: #ffcfcf;
+  --color-critic-300: #ff9090;
+  --color-critic-500: #ff5757;
+  --color-critic-600: #ff2200;
 }
 
 :root {

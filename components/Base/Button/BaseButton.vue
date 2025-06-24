@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useExtendProps } from '~/composables/useExtendProps'
 import { useRounded } from '~/composables/useRounded'
+import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from 'vue-router'
 import type { ColorType, VariantType, SizeType } from '~/types/utils'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
@@ -50,8 +51,11 @@ export interface ButtonEntity {
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
   active?: boolean
+  to?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
   target?: null | '_blank' | '_parent' | '_self' | '_top' | (string & {})
   rounded?: boolean | ExtendSizesType
+  raised?: boolean
+  underline?: boolean
 }
 </script>
 
@@ -150,9 +154,10 @@ const { defineRounded } = useRounded(computed(() => props.rounded))
     :type="type"
     :disabled="disabled"
     :active="active"
+    :to="to"
     :target="target"
     :ui="{
-      base: [defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded],
+      base: [defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded, raised ? 'shadow-xs' : null, underline ? 'underline underline-offset-4' : null],
       leadingIcon: [defineExtendIconSize],
       trailingIcon: [defineExtendIconSize]
     }"
