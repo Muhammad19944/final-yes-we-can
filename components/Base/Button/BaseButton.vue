@@ -56,6 +56,14 @@ export interface ButtonEntity {
   rounded?: boolean | ExtendSizesType
   raised?: boolean
   underline?: boolean
+  ui?: {
+    base?: string | string[]
+    label?: string | string[]
+    leadingIcon?: string | string[]
+    leadingAvatar?: string | string[]
+    leadingAvatarSize?: string | string[]
+    trailingIcon?: string | string[]
+  }
 }
 </script>
 
@@ -129,6 +137,10 @@ const defineExtendSquare = computed(() => {
 })
 
 const { defineRounded } = useRounded(computed(() => props.rounded))
+
+const defineBase = computed(() => {
+  return [props.raised ? 'shadow-xs' : null, props.underline ? 'underline underline-offset-4' : null]
+})
 </script>
 
 <template>
@@ -157,9 +169,12 @@ const { defineRounded } = useRounded(computed(() => props.rounded))
     :to="to"
     :target="target"
     :ui="{
-      base: [defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded, raised ? 'shadow-xs' : null, underline ? 'underline underline-offset-4' : null],
-      leadingIcon: [defineExtendIconSize],
-      trailingIcon: [defineExtendIconSize]
+      base: [defineBase, defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded, ui?.base],
+      label: [ui?.label],
+      leadingAvatar: [ui?.leadingAvatar],
+      leadingAvatarSize: [ui?.leadingAvatarSize],
+      leadingIcon: [defineExtendIconSize, ui?.leadingIcon],
+      trailingIcon: [defineExtendIconSize, ui?.trailingIcon]
     }"
   >
     <template #default>
