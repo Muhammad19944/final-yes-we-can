@@ -52,6 +52,7 @@ export interface FormInputEntity {
   autofocus?: boolean
   autofocusDelay?: number
   disabled?: boolean
+  readonly?: boolean
   highlight?: boolean
   icon?: string
   avatar?: AvatarEntity
