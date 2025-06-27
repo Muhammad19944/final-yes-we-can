@@ -16,3 +16,5 @@ export type OrientationType = 'horizontal' | 'vertical'
 export type IndicatorType = 'start' | 'end' | 'hidden'
 
 export type BorderTypes = 'solid' | 'dashed' | 'dotted'
+
+export type SingleOrMultiple = 'single' | 'multiple'
