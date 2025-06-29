@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { SingleOrMultiple } from '~/types/utils'
+import type { SingleOrMultiple } from '~/types/libs'
 
 export interface AccordionItemEntity {
   label?: string
@@ -23,7 +23,6 @@ export interface AccordionItemEntity {
 
 export interface BaseAccordionEntity {
   as?: string
-  items?: AccordionItemEntity[]
   trailingIcon?: string
   labelKey?: string
   collapsible?: boolean
@@ -36,8 +35,8 @@ export interface BaseAccordionEntity {
 }
 </script>
 
-<script setup lang="ts">
-const props = withDefaults(defineProps<BaseAccordionEntity>(), {
+<script setup lang="ts" generic="T extends AccordionItemEntity = AccordionItemEntity">
+const props = withDefaults(defineProps<BaseAccordionEntity & { items?: T[] }>(), {
   as: 'div',
   labelKey: 'label',
   collapsible: true,
@@ -45,11 +44,11 @@ const props = withDefaults(defineProps<BaseAccordionEntity>(), {
   unmountOnHide: true
 })
 const slots = defineSlots<{
-  leading(props: { item: AccordionItemEntity; index: number; open: boolean }): unknown
-  default(props: { item: AccordionItemEntity; index: number; open: boolean }): unknown
-  trailing(props: { item: AccordionItemEntity; index: number; open: boolean }): unknown
-  content(props: { item: AccordionItemEntity; index: number; open: boolean }): unknown
-  body(props: { item: AccordionItemEntity; index: number; open: boolean }): unknown
+  leading(props: { item: T; index: number; open: boolean }): unknown
+  default(props: { item: T; index: number; open: boolean }): unknown
+  trailing(props: { item: T; index: number; open: boolean }): unknown
+  content(props: { item: T; index: number; open: boolean }): unknown
+  body(props: { item: T; index: number; open: boolean }): unknown
 }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | string[] | undefined): void
@@ -70,11 +69,11 @@ const model = useModel(props, 'modelValue')
     :disabled="disabled"
     :unmount-on-hide="unmountOnHide"
     :ui="{
-      item: ['border-b border-b-(--color-greyscale-200) first:border-t last:border-b py-1.5', ui?.item],
+      item: ['border-b border-b-(--color-greyscale-200) first:border-t last:border-b', ui?.item],
       header: [ui?.header],
       trigger: [ui?.trigger],
       leadingIcon: [ui?.leadingIcon],
-      label: ['text-xl font-semibold text-(--color-greyscale-900)', ui?.label],
+      label: ['text-lg font-semibold text-(--color-greyscale-900)', ui?.label],
       trailingIcon: ['text-(--color-greyscale-500) group-data-[state=open]:text-(--color-greyscale-900)', ui?.trailingIcon],
       content: [ui?.content],
       body: [ui?.body]

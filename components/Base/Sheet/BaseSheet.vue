@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useRounded } from '~/composables/useRounded'
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 
 export interface BaseSheetEntity {
   shadow?: boolean | 'shadow-1' | 'shadow-2'

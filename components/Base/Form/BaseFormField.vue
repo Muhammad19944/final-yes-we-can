@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useExtendProps } from '~/composables/useExtendProps'
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 /**
  * The Nuxt UI Input component supports size
  * prop values: 'xs', 'sm', 'md', 'lg', and 'xl'.

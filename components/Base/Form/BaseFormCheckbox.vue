@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { AcceptableValue } from '@nuxt/ui'
-import type { ColorType, IndicatorType, RadioVariantType, SizeType } from '~/types/utils'
+import type { ColorType, IndicatorType, RadioVariantType, SizeType } from '~/types/libs'
+import type { HeadingEntity } from '../Heading/BaseHeading.vue'
 
 type ModelType = boolean | 'indeterminate'
 
@@ -21,15 +22,16 @@ export interface BaseFormCheckboxEntity {
   id?: string
   defaultValue?: ModelType
   modelValue?: ModelType
+  text?: HeadingEntity
   ui?: {
-    root: string | string[]
-    container: string | string[]
-    base: string | string[]
-    indicator: string | string[]
-    icon: string | string[]
-    wrapper: string | string[]
-    label: string | string[]
-    description: string | string[]
+    root?: string | string[]
+    container?: string | string[]
+    base?: string | string[]
+    indicator?: string | string[]
+    icon?: string | string[]
+    wrapper?: string | string[]
+    label?: string | string[]
+    description?: string | string[]
   }
   // Custom field for rendering in storybook slots table (it needs if interface keys and slot keys are equal)
   labelSlot?: object
@@ -44,10 +46,15 @@ const props = withDefaults(defineProps<BaseFormCheckboxEntity>(), {
   color: 'primary',
   variant: 'list',
   size: 'md',
-  value: 'on'
+  value: 'on',
+  text: () => ({
+    level: 'h9',
+    weight: 'medium',
+    color: 'text-(--color-greyscale-900)'
+  })
 })
 const emit = defineEmits<{
-  (e: 'change', payload: Event): void
+  (e: 'change', payload: Event, model: ModelType | undefined): void
   (e: 'update:modelValue', payload: ModelType): void
 }>()
 const model = useModel(props, 'modelValue')
@@ -75,14 +82,14 @@ const model = useModel(props, 'modelValue')
     :ui="{
       root: [ui?.root],
       container: [ui?.container],
-      base: ['size-5 rounded-full', ui?.base],
+      base: ['rounded-full', ui?.base],
       indicator: ['p-[3px]', ui?.indicator],
       icon: [ui?.icon],
       wrapper: ['-mt-[1px]', ui?.wrapper],
-      label: [ui?.label],
+      label: [text.level, text.weight, text.color, ui?.label],
       description: [ui?.description]
     }"
-    @change="emit('change', $event)"
+    @change="emit('change', $event, model)"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #label="{ label }">
@@ -92,8 +99,9 @@ const model = useModel(props, 'modelValue')
       >
         <BaseHeading
           :text="label"
-          weight="medium"
-          color="text-[var(--color-greyscale-900)]"
+          :level="text.level"
+          :weight="text.weight"
+          :color="text.color"
         />
       </slot>
     </template>

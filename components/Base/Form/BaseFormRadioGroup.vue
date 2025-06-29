@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { AcceptableValue, SizeType, ColorType, RadioVariantType, OrientationType, IndicatorType } from '~/types/utils'
+import type { AcceptableValue, SizeType, ColorType, RadioVariantType, OrientationType, IndicatorType } from '~/types/libs'
 
 // Base interface for each radio group item
 export interface BaseFormRadioGroupItemEntity {

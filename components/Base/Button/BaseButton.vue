@@ -2,7 +2,7 @@
 import { useExtendProps } from '~/composables/useExtendProps'
 import { useRounded } from '~/composables/useRounded'
 import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from 'vue-router'
-import type { ColorType, VariantType, SizeType } from '~/types/utils'
+import type { ColorType, VariantType, SizeType } from '~/types/libs'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
 /**

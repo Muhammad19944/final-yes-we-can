@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useExtendProps } from '~/composables/useExtendProps'
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 import type { FormInputEntity } from './BaseFormInput.vue'
 
 /**

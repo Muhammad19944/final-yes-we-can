@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useRounded } from '~/composables/useRounded'
 import type { ButtonEntity } from '~/components/Base/Button/BaseButton.vue'
-import type { SizeType, ColorType, OrientationType } from '~/types/utils'
+import type { SizeType, ColorType, OrientationType } from '~/types/libs'
 
 export interface BaseAlertEntity {
   color?: Exclude<ColorType, 'primary' | 'secondary'>

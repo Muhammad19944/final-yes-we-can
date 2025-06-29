@@ -1,4 +1,4 @@
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 /**
  * A composable utility that maps the `rounded` prop to corresponding Tailwind CSS classes.
  *

@@ -1,7 +1,7 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { it, expect } from 'vitest'
 import BaseAvatar from './BaseAvatar.vue'
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 
 const sizes: Record<SizeType, string> = {
   '3xs': 'size-4',

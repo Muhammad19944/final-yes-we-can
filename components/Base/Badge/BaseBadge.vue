@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useExtendProps } from '~/composables/useExtendProps'
-import type { ColorType, SizeType, VariantType } from '~/types/utils'
+import type { ColorType, SizeType, VariantType } from '~/types/libs'
 import type { AvatarEntity } from '../Avatar/BaseAvatar.vue'
 
 /**
@@ -44,12 +44,12 @@ export interface BaseBadgeEntity {
   closable?: boolean
   rounded?: boolean
   ui?: {
-    base: string | string[]
-    label: string | string[]
-    leadingIcon: string | string[]
-    leadingAvatar: string | string[]
-    leadingAvatarSize: string | string[]
-    trailingIcon: string | string[]
+    base?: string | string[]
+    label?: string | string[]
+    leadingIcon?: string | string[]
+    leadingAvatar?: string | string[]
+    leadingAvatarSize?: string | string[]
+    trailingIcon?: string | string[]
   }
 }
 </script>
@@ -63,7 +63,7 @@ const props = withDefaults(defineProps<BaseBadgeEntity>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'emit:close', payload: string | number | undefined): string | number | undefined
+  (e: 'emit:close', payload: string | number | undefined): void
 }>()
 
 const { defineExtend: defineColor } = useExtendProps<CustomColorsType, ExtendColorsType, UiColorsType>(

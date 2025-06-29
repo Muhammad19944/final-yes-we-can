@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
-import type { ColorType, SizeType, BorderTypes, OrientationType } from '~/types/utils'
+import type { ColorType, SizeType, BorderTypes, OrientationType } from '~/types/libs'
 
 export interface BaseSeparatorEntity {
   as?: string

@@ -2,7 +2,7 @@
 import { useExtendProps } from '~/composables/useExtendProps'
 import { useRounded } from '~/composables/useRounded'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
-import type { ColorType, VariantType, SizeType } from '~/types/utils'
+import type { ColorType, VariantType, SizeType } from '~/types/libs'
 /**
  * The Nuxt UI Input component supports size
  * prop values: 'xs', 'sm', 'md', 'lg', and 'xl'.

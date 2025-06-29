@@ -1,6 +1,6 @@
 import { it, expect, describe } from 'vitest'
 import { useExtendProps } from '~/composables/useExtendProps'
-import type { ColorType, SizeType } from '~/types/utils'
+import type { ColorType, SizeType } from '~/types/libs'
 
 describe('useExtendProps composable', () => {
   const customColors = ['greyscale', 'white', 'gradient'] as const

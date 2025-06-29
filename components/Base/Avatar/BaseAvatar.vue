@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { SizeType } from '~/types/utils'
+import type { SizeType } from '~/types/libs'
 
 export interface AvatarEntity {
   as?: string
