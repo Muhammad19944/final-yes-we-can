@@ -5,6 +5,8 @@
     <CardJobDescription />
 
     <CardJobGeneral />
+
+    <CardJobSize />
   </div>
 </template>
 
