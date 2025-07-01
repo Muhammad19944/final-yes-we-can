@@ -7,6 +7,8 @@
     <CardJobGeneral />
 
     <CardJobSize />
+
+    <CardJobFiles />
   </div>
 </template>
 
