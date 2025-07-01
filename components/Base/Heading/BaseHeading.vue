@@ -3,7 +3,7 @@ export interface HeadingEntity {
   text?: string
   level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8' | 'h9'
   weight?: 'normal' | 'medium' | 'semi' | 'bold' | 'extra'
-  color?: string
+  color?: string | string[]
 }
 </script>
 
