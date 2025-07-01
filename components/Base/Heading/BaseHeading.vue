@@ -4,6 +4,9 @@ export interface HeadingEntity {
   level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8' | 'h9'
   weight?: 'normal' | 'medium' | 'semi' | 'bold' | 'extra'
   color?: string | string[]
+  ui?: {
+    root?: string | string[]
+  }
 }
 </script>
 
@@ -31,7 +34,7 @@ const defineLevel = computed(() => {
     case 'h8':
       return 'text-base' // 16px
     default: // h9
-      return 'text-sm' // 14px
+      return 'text-sm leading-5.5' // 14px
   }
 })
 const defineWeight = computed(() => {
@@ -51,7 +54,9 @@ const defineWeight = computed(() => {
 </script>
 
 <template>
-  <h1 :class="[defineLevel, defineWeight, color]">
-    {{ text }}
+  <h1 :class="[defineLevel, defineWeight, color, ui?.root]">
+    <slot>
+      {{ text }}
+    </slot>
   </h1>
 </template>
