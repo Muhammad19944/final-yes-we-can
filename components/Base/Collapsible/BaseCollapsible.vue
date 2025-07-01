@@ -13,9 +13,9 @@ const count = ref(0)
 
     <div class="-mx-1.5">
       <BaseButton
-        label="Ko’proq"
-        variant="link"
+        :label="count & 1 ? 'Expand' : 'Collapse'"
         :icon="count & 1 ? 'solar:alt-arrow-down-linear' : 'solar:alt-arrow-up-linear'"
+        variant="link"
         trailing
         square
         :ui="{

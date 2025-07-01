@@ -31,7 +31,7 @@ withDefaults(defineProps<NavigationJobMetaEntity>(), {
     :items="items"
     :ui="{
       list: 'gap-2',
-      link: 'gap-1 font-medium text-(--color-greyscale-900)'
+      link: 'gap-1'
     }"
   >
     <template #item="{ item }">
@@ -55,7 +55,7 @@ withDefaults(defineProps<NavigationJobMetaEntity>(), {
           :class="[
             {
               '-mt-0.5': compact && item.description,
-              '-mt-1': !compact && item.description
+              '-mt-0.75': !compact && item.description
             }
           ]"
         >
@@ -64,7 +64,7 @@ withDefaults(defineProps<NavigationJobMetaEntity>(), {
               :text="item.label"
               :level="compact ? 'h9' : 'h8'"
               weight="medium"
-              :color="item.ui?.label"
+              :color="`${item.ui?.label} font-medium text-(--color-greyscale-900)`"
             />
 
             <template v-if="item.trailing">

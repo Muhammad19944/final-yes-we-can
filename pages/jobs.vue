@@ -3,6 +3,8 @@
 <template>
   <div class="p-20 space-y-5">
     <CardJobDescription />
+
+    <CardJobGeneral />
   </div>
 </template>
 

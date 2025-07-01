@@ -21,14 +21,14 @@ withDefaults(defineProps<JobDescriptionEntity>(), {
     }"
   >
     <BaseHeading
-      :text="label ?? 'Figmada dashboard dizayn chizish'"
+      :text="label"
       level="h7"
       weight="semi"
       color="text-(--color-greyscale-900)"
     />
 
     <BaseHeading
-      :text="time ?? '4 soat oldin e’lon qilingan'"
+      :text="time"
       weight="medium"
       color="text-(--color-greyscale-500)"
       :ui="{
