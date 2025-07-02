@@ -30,20 +30,6 @@ withDefaults(defineProps<JobSkillsEntity>(), {
       }"
     />
 
-    <div class="flex flex-wrap gap-2">
-      <template
-        v-for="skill in skills"
-        :key="skill.label"
-      >
-        <BaseBadge
-          :label="skill.label"
-          color="greyscale"
-          size="lg"
-          :ui="{
-            base: 'text-(--color-greyscale-700)'
-          }"
-        />
-      </template>
-    </div>
+    <TechnologySkills :skills="skills" />
   </BaseSheet>
 </template>
