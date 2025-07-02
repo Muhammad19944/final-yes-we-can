@@ -38,11 +38,13 @@ const item = ref<NavigationItemEntity>({
       }"
     />
 
-    <NavigationJobGeneral
-      :append="item"
-      :ui="{
-        link: 'pr-12 pl-2'
-      }"
-    />
+    <div class="-ml-2">
+      <NavigationJobGeneral
+        :append="item"
+        :ui="{
+          link: 'pr-12 pl-2'
+        }"
+      />
+    </div>
   </BaseSheet>
 </template>

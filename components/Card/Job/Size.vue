@@ -56,13 +56,15 @@ const items = ref<NavigationItemEntity[]>([
       }"
     />
 
-    <NavigationJobMeta
-      :items="items"
-      :compact="false"
-      separator="divider"
-      :ui="{
-        link: 'pr-12 pl-2'
-      }"
-    />
+    <div class="-ml-2">
+      <NavigationJobMeta
+        :items="items"
+        :compact="false"
+        separator="divider"
+        :ui="{
+          link: 'pr-12 pl-2'
+        }"
+      />
+    </div>
   </BaseSheet>
 </template>

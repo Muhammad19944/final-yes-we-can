@@ -1,6 +1,19 @@
 <script lang="ts">
+import { useExtendProps } from '~/composables/useExtendProps'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
 import type { ColorType, SizeType, OrientationType } from '~/types/libs'
+
+/**
+ * The Nuxt UI Button component supports color
+ * prop values: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'.
+ * Here, we extend the color prop by adding custom
+ * values 'white' to support additional styling options.
+ */
+const customColors = ['white'] as const
+type CustomColorsType = (typeof customColors)[number]
+
+type UiColorsType = ColorType
+type ExtendColorsType = ColorType | CustomColorsType
 
 export interface TabItemEntity {
   label?: string
@@ -14,7 +27,7 @@ export interface TabItemEntity {
 
 export interface BaseTabsEntity {
   as?: string
-  color?: ColorType
+  color?: ExtendColorsType
   variant?: 'pill' | 'link'
   size?: Exclude<SizeType, '3xs' | '2xs' | '3xl' | '2xl'>
   orientation?: OrientationType
@@ -25,6 +38,7 @@ export interface BaseTabsEntity {
   activationMode?: 'automatic' | 'manual'
   unmountOnHide?: boolean
   rounded?: boolean
+  border?: boolean
   ui?: {
     root?: string | string[]
     list?: string | string[]
@@ -50,7 +64,8 @@ const props = withDefaults(defineProps<BaseTabsEntity & { items?: T[] }>(), {
   labelKey: 'label',
   defaultValue: 0,
   activationMode: 'automatic',
-  unmountOnHide: true
+  unmountOnHide: true,
+  border: true
 })
 
 const slots = defineSlots<{
@@ -62,8 +77,32 @@ const slots = defineSlots<{
   ['list-trailing'](): unknown
 }>()
 
+const { defineExtend: defineColor } = useExtendProps<CustomColorsType, ExtendColorsType, UiColorsType>(
+  customColors,
+  computed(() => props.color),
+  'primary'
+)
+
+const defineExtendColor = computed(() => {
+  switch (defineColor.value.extend) {
+    case 'white':
+      return {
+        indicator: 'bg-white shadow-10',
+        trigger: 'data-[state=active]:text-(--color-green-500)'
+      }
+    default:
+      return {
+        indicator: '',
+        trigger: ''
+      }
+  }
+})
+
 const defineRounded = computed(() => {
-  return [props.rounded ? 'rounded-[80px]' : '']
+  return {
+    list: 'rounded-[10px]',
+    indicator: 'rounded-lg'
+  }
 })
 
 const model = useModel(props, 'modelValue')
@@ -74,7 +113,7 @@ const model = useModel(props, 'modelValue')
     v-model="model"
     :as="as"
     :items="items"
-    :color="color"
+    :color="defineColor.ui"
     :variant="variant"
     :size="size"
     :orientation="orientation"
@@ -85,9 +124,9 @@ const model = useModel(props, 'modelValue')
     :unmount-on-hide="unmountOnHide"
     :ui="{
       root: [ui?.root],
-      list: [defineRounded, ui?.list],
-      indicator: [defineRounded, ui?.indicator],
-      trigger: [ui?.trigger],
+      list: [defineRounded.list, border ? '' : 'ring-0', ui?.list],
+      indicator: [defineRounded.indicator, defineExtendColor.indicator, ui?.indicator],
+      trigger: [defineExtendColor.trigger, 'cursor-pointer', ui?.trigger],
       content: [ui?.content],
       leadingIcon: [ui?.leadingIcon],
       leadingAvatar: [ui?.leadingAvatar],

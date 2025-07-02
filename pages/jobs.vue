@@ -1,36 +1,8 @@
-<script lang="ts" setup>
-const items = ref([
-  {
-    label: 'Figma'
-  },
-  {
-    label: 'UX/UI dizayn'
-  },
-  {
-    label: 'Dashboard'
-  },
-  {
-    label: 'Website'
-  },
-  {
-    label: 'SEO'
-  }
-])
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="p-20 space-y-5">
-    <CardJobCustomerAside />
-
-    <CardJobDescription />
-
-    <CardJobGeneral />
-
-    <CardJobSize />
-
-    <CardJobFiles />
-
-    <CardJobSkills :skills="items" />
+    <WidgetJobDetail />
   </div>
 </template>
 

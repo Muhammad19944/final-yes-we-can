@@ -12,7 +12,7 @@ export interface NavigationItemEntity {
   }
 }
 
-interface NavigationJobMetaEntity {
+export interface NavigationJobMetaEntity {
   items: NavigationItemEntity[]
   compact?: boolean
   separator?: 'dot' | 'divider'
@@ -77,13 +77,15 @@ withDefaults(defineProps<NavigationJobMetaEntity>(), {
             </template>
           </div>
 
-          <template v-if="item.description">
-            <BaseHeading
-              :text="item.description"
-              weight="medium"
-              color="text-(--color-greyscale-500)"
-              class="mt-0.5"
-            />
+          <template v-if="!compact">
+            <template v-if="item.description">
+              <BaseHeading
+                :text="item.description"
+                weight="medium"
+                color="text-(--color-greyscale-500)"
+                class="mt-0.5"
+              />
+            </template>
           </template>
         </div>
       </div>
@@ -91,7 +93,7 @@ withDefaults(defineProps<NavigationJobMetaEntity>(), {
 
     <template #separator>
       <template v-if="separator === 'dot'">
-        <div class="w-1 h-1 rounded-full bg-(--color-greyscale-400)" />
+        <div class="w-1 h-1 rounded-full bg-(--color-greyscale-400) mx-0.5" />
       </template>
 
       <template v-else>
