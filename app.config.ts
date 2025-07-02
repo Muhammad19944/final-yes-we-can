@@ -3,6 +3,7 @@ import inputTheme from '~/theme/input'
 import inputTagsTheme from '~/theme/inputTags'
 import selectMenuTheme from '~/theme/selectMenu'
 import tabsTheme from '~/theme/tabs'
+import tooltipTheme from '~/theme/tooltip'
 
 export default defineAppConfig({
   ui: {
@@ -10,6 +11,7 @@ export default defineAppConfig({
     ...inputTheme,
     ...inputTagsTheme,
     ...selectMenuTheme,
-    ...tabsTheme
+    ...tabsTheme,
+    ...tooltipTheme
   }
 })

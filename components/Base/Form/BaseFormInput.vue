@@ -132,7 +132,7 @@ const defineExtendLeading = computed(() => {
 const defineExtendTrailing = computed(() => {
   switch (defineSize.value.extend) {
     case '2xl':
-      return 'pe-3'
+      return 'pe-2'
     case '3xl':
       return 'pe-4'
     default:
@@ -201,7 +201,8 @@ const model = useModel(props, 'modelValue')
     :loading="loading"
     :loading-icon="loadingIcon"
     :ui="{
-      base: [defineExtendSize, defineRounded, defineExtendLeadingPadding, defineExtendTrailingPadding, ui?.base],
+      root: [ui?.root],
+      base: [defineExtendSize, defineRounded, defineExtendLeadingPadding, defineExtendTrailingPadding, props.readonly ? 'pointer-events-none' : '', ui?.base],
       leading: [defineExtendLeading, ui?.leading],
       trailing: [defineExtendTrailing, ui?.trailing],
       leadingIcon: [defineExtendIconSize, ui?.leadingIcon],

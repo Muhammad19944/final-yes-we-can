@@ -12,6 +12,7 @@ export interface BaseSeparatorEntity {
   type?: BorderTypes
   orientation?: OrientationType
   decorative?: boolean
+  container?: boolean
   ui?: {
     root?: string | string[]
     border?: string | string[]
@@ -48,7 +49,7 @@ withDefaults(defineProps<BaseSeparatorEntity>(), {
     :ui="{
       root: [ui?.root],
       border: ['border-[var(--color-greyscale-200)]', ui?.border],
-      container: ['text-sm text-[var(--color-greyscale-400)] mx-6', ui?.container],
+      container: ['text-sm text-[var(--color-greyscale-400)] mx-6', container ? '' : 'hidden', ui?.container],
       icon: [ui?.icon],
       avatar: [ui?.avatar],
       avatarSize: [ui?.avatarSize],

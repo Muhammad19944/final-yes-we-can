@@ -8,6 +8,10 @@ export interface AvatarLabeledEntity extends AvatarEntity {
   labelSlot?: object
   // Custom field for rendering in storybook slots table (it needs if interface keys and slot keys are equal)
   subLabelSlot?: object
+  ui?: {
+    root?: string | string[]
+    avatar?: string | string[]
+  }
 }
 </script>
 
@@ -16,8 +20,14 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
 </script>
 
 <template>
-  <div class="flex items-start gap-4">
-    <div class="flex relative">
+  <div
+    class="flex items-start gap-4"
+    :class="[ui?.root]"
+  >
+    <div
+      class="flex relative"
+      :class="[ui?.avatar]"
+    >
       <BaseAvatar
         :as="as"
         :src="src"
@@ -25,7 +35,7 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
         :icon="icon"
         :size="size"
         :text="text"
-        :custom-size="customSize || 56"
+        :custom-size="customSize"
         :background="background"
       />
 
@@ -37,7 +47,7 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
         <slot name="label">
           <BaseHeading
             :text="label"
-            level="h7"
+            level="h8"
             weight="semi"
             color="text-greyscale-900"
           />

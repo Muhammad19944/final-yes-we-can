@@ -20,6 +20,8 @@ const items = ref([
 
 <template>
   <div class="p-20 space-y-5">
+    <CardJobCustomerAside />
+
     <CardJobDescription />
 
     <CardJobGeneral />
