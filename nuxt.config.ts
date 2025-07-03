@@ -73,7 +73,7 @@ export default defineNuxtConfig({
     defaultLocale: 'uz',
     strategy: 'prefix',
     detectBrowserLanguage: {
-      useCookie: false,
+      useCookie: true,
       redirectOn: 'root'
     },
     rootRedirect: {

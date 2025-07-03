@@ -2,6 +2,7 @@
 import { useRounded } from '~/composables/useRounded'
 import type { AcceptableValue, ArrayOrNested, ColorType, GetItemKeys, GetModelValue, SizeType, VariantType } from '~/types/libs'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
+import type { FormInputEntity } from '~/components/Base/Form/BaseFormInput.vue'
 
 /**
  * The Nuxt UI Input component supports size
@@ -15,7 +16,7 @@ type CustomSizesType = (typeof customSizes)[number]
 type UiSizesType = Exclude<SizeType, '3xs' | '2xs' | CustomSizesType>
 type ExtendSizesType = UiSizesType | CustomSizesType
 
-interface _SelectMenuItem {
+export interface _SelectMenuItem {
   label?: string
   icon?: string
   avatar?: AvatarEntity
@@ -39,14 +40,16 @@ interface _SelectMenuItem {
 
 export type SelectMenuItem = _SelectMenuItem | AcceptableValue | boolean
 
-export interface BaseFormSelectEntity<T extends ArrayOrNested<SelectMenuItem> = ArrayOrNested<SelectMenuItem>, VK extends GetItemKeys<T> | undefined = undefined, M extends boolean = false> {
+type SearchInputType = FormInputEntity & { size?: Exclude<FormInputEntity['size'], '3xs' | '2xs' | '2xl' | '3xl'> }
+
+export interface BaseFormSelectEntity<T, VK extends GetItemKeys<T> | undefined = undefined, M extends boolean = false> {
   id?: string
   placeholder?: string
+  searchInput?: boolean | SearchInputType
   color?: ColorType
   variant?: Exclude<VariantType, 'link' | 'solid'> | 'none'
   size?: ExtendSizesType
   required?: boolean
-  items?: T
   defaultValue?: GetModelValue<T, VK, M>
   modelValue?: GetModelValue<T, VK, M>
   multiple?: M & boolean
@@ -75,13 +78,23 @@ export interface BaseFormSelectEntity<T extends ArrayOrNested<SelectMenuItem> = 
 }
 </script>
 
-<script setup lang="ts">
-const props = withDefaults(defineProps<BaseFormSelectEntity>(), {
+<script setup lang="ts" generic="T extends ArrayOrNested<SelectMenuItem> = ArrayOrNested<SelectMenuItem>">
+const props = withDefaults(defineProps<BaseFormSelectEntity<T> & { items?: T }>(), {
   placeholder: 'Manzilni tanlang',
+  searchInput: true,
   color: 'primary',
   variant: 'subtle',
   rounded: 'xl' as const
 })
+
+const emit = defineEmits<{
+  (e: 'blur' | 'focus', event: FocusEvent): void
+  (e: 'change', event: Event): void
+  (e: 'update:open', value: boolean): void
+  (e: 'create' | 'update:searchTerm', item: string): void
+  (e: 'highlight', payload: { ref: HTMLElement; value: unknown } | undefined): void
+  (e: 'update:modelValue', payload: never): void
+}>()
 
 const { defineExtend: defineSize } = useExtendProps<CustomSizesType, ExtendSizesType, UiSizesType>(
   customSizes,
@@ -110,6 +123,7 @@ const model = useModel(props, 'modelValue')
     :id="id"
     v-model="model"
     :placeholder="placeholder"
+    :search-input="searchInput"
     :color="color"
     :variant="variant"
     :size="defineSize.ui"
@@ -138,5 +152,20 @@ const model = useModel(props, 'modelValue')
       itemTrailingIcon: [ui?.itemTrailingIcon],
       itemLabel: [ui?.itemLabel]
     }"
-  />
+    @blur="(event) => emit('blur', event)"
+    @focus="(event) => emit('focus', event)"
+    @change="(event) => emit('change', event)"
+    @update:open="(event) => emit('update:open', event)"
+    @create="(event) => emit('create', event)"
+    @update:search-term="(event) => emit('update:searchTerm', event)"
+    @highlight="(event) => emit('highlight', event)"
+  >
+    <template #item="{ item, index }">
+      <slot
+        name="item"
+        :item="item"
+        :index="index"
+      />
+    </template>
+  </USelectMenu>
 </template>
