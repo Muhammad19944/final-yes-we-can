@@ -62,7 +62,7 @@ watch(
     variant="soft"
     size="lg"
     :ui="{
-      base: 'w-28',
+      base: 'w-28 font-medium',
       item: 'p-0',
       group: 'p-0.5'
     }"

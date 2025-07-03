@@ -2,7 +2,7 @@
 export interface HeadingEntity {
   text?: string
   level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8' | 'h9'
-  weight?: 'normal' | 'medium' | 'semi' | 'bold' | 'extra'
+  weight?: 'light' | 'normal' | 'medium' | 'semi' | 'bold' | 'extra'
   color?: string | string[]
   ui?: {
     root?: string | string[]
@@ -47,8 +47,10 @@ const defineWeight = computed(() => {
       return 'font-semibold'
     case 'medium':
       return 'font-medium'
-    default: // normal
-      return 'font-normal'
+    case 'normal':
+      return 'font-regular'
+    default:
+      return 'font-light'
   }
 })
 </script>

@@ -1,8 +1,14 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
+@import './fonts.css';
 
 @theme {
   --container-width: 99.5rem; /* 1592px */
+
+  --font-light: 'sf-pro-display-light';
+  --font-regular: 'sf-pro-display-regular';
+  --font-medium: 'sf-pro-display-medium';
+  --font-semibold: 'sf-pro-display-semibold';
 
   --primary-linear: 45.42deg, #35af07 -0.18%, #accd0f 92.29%;
 

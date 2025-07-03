@@ -94,7 +94,7 @@ const defineExtendLabel = computed(() => {
       root: [defineExtendLabel, ui?.root],
       wrapper: [ui?.wrapper],
       labelWrapper: [ui?.labelWrapper],
-      label: ['text-[var(--color-greyscale-900)] font-medium', ui?.label],
+      label: [ui?.label],
       container: [ui?.container],
       description: [ui?.description],
       error: [ui?.error],

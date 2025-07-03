@@ -11,7 +11,8 @@ export interface FormPasswordEntity extends FormInputEntity {
 const props = withDefaults(defineProps<FormPasswordEntity>(), {
   placeholder: 'Enter password',
   showIcon: 'solar:eye-outline',
-  hideIcon: 'solar:eye-closed-outline'
+  hideIcon: 'solar:eye-closed-outline',
+  rounded: 'xl' as const
 })
 
 const model = useModel(props, 'modelValue')
@@ -45,7 +46,12 @@ const togglePasswordType = ref(true)
     :loading-icon="loadingIcon"
     :rounded="rounded"
     :ui="{
-      trailing: 'pe-1'
+      root: ui?.root,
+      base: ui?.base,
+      leading: ui?.leading,
+      leadingIcon: ui?.leadingIcon,
+      trailingIcon: ui?.trailingIcon,
+      trailing: ui?.trailing
     }"
   >
     <template #trailing>
@@ -53,7 +59,7 @@ const togglePasswordType = ref(true)
         color="neutral"
         variant="link"
         square
-        :size="size"
+        size="lg"
         :icon="togglePasswordType ? props.showIcon : props.hideIcon"
         :aria-label="togglePasswordType ? 'Show password' : 'Hide password'"
         :aria-pressed="togglePasswordType"

@@ -1,4 +1,5 @@
 <script lang="ts">
+import { vMaska } from 'maska/vue'
 import { useExtendProps } from '~/composables/useExtendProps'
 import { useRounded } from '~/composables/useRounded'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
@@ -64,6 +65,7 @@ export interface FormInputEntity {
   loadingIcon?: string
   modelValue?: null | string | number
   rounded?: boolean | ExtendSizesType
+  maska?: string
   ui?: {
     root?: string | string[]
     base?: string | string[]
@@ -179,6 +181,7 @@ const model = useModel(props, 'modelValue')
   <UInput
     :id="id"
     v-model="model"
+    v-maska="maska"
     :as="as"
     :name="name"
     :type="type"
@@ -202,7 +205,7 @@ const model = useModel(props, 'modelValue')
     :loading-icon="loadingIcon"
     :ui="{
       root: [ui?.root],
-      base: [defineExtendSize, defineRounded, defineExtendLeadingPadding, defineExtendTrailingPadding, props.readonly ? 'pointer-events-none' : '', ui?.base],
+      base: ['placeholder:text-sm', defineExtendSize, defineRounded, defineExtendLeadingPadding, defineExtendTrailingPadding, props.readonly ? 'pointer-events-none' : '', ui?.base],
       leading: [defineExtendLeading, ui?.leading],
       trailing: [defineExtendTrailing, ui?.trailing],
       leadingIcon: [defineExtendIconSize, ui?.leadingIcon],

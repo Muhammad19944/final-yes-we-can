@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'sf-pro-display-light';
+  src: local('sf-pro-display-light'), url('../fonts/sf-pro-display-light.woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'sf-pro-display-regular';
+  src: local('sf-pro-display-regular'), url('../fonts/sf-pro-display-regular.woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'sf-pro-display-medium';
+  src: local('sf-pro-display-medium'), url('../fonts/sf-pro-display-medium.woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'sf-pro-display-semibold';
+  src: local('sf-pro-display-semibold'), url('../fonts/sf-pro-display-semibold.woff2');
+  font-display: swap;
+}
