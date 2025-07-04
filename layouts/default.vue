@@ -2,7 +2,7 @@
 
 <template>
   <div class="layout-wrapper flex flex-col min-h-[100vh] bg-zinc-50">
-    <the-header />
+    <NavigationHeader />
 
     <div class="flex flex-col flex-1">
       <slot />

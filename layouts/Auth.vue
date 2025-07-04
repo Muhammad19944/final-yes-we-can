@@ -9,7 +9,7 @@
       }"
     />
 
-    <div class="flex items-center justify-center flex-1 bg-zinc-50 pt-16">
+    <div class="flex items-center justify-center flex-1 bg-zinc-50">
       <slot />
     </div>
   </div>
