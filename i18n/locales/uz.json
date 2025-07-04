@@ -1,5 +1,10 @@
 {
   "welcome": "Salom",
   "collapse": "Yopish",
-  "expand": "Ochish"
+  "expand": "Ochish",
+  "term_and_condition": {
+    "term": "qonun-qoidalariga",
+    "condition": "shartlariga",
+    "text": "Platformaning {term} va {condition} roziman"
+  }
 }

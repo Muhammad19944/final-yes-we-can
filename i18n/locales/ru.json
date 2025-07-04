@@ -1,5 +1,10 @@
 {
   "welcome": "Привет",
   "collapse": "Свернуть",
-  "expand": "Развернуть"
+  "expand": "Развернуть",
+  "term_and_condition": {
+    "term": "qonun-qoidalar",
+    "condition": "shartlar",
+    "text": "Ruuuu Platformaning {term}iga va {condition}iga roziman"
+  }
 }

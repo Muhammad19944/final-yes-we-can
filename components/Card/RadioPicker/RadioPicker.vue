@@ -1,10 +1,12 @@
 <script lang="ts">
 import type { BaseFormRadioGroupItemEntity, BaseFormRadioGroupEntity } from '~/components/Base/Form/BaseFormRadioGroup.vue'
 
+export interface RadioPickerItemEntity extends BaseFormRadioGroupItemEntity {
+  icon?: string
+}
+
 export interface RadioPickerEntity extends BaseFormRadioGroupEntity {
-  items?: (BaseFormRadioGroupItemEntity & {
-    icon?: string
-  })[]
+  items?: RadioPickerItemEntity[]
 }
 </script>
 
@@ -32,26 +34,27 @@ const model = useModel(props, 'modelValue')
     size="lg"
     :ui="{
       fieldset: 'gap-y-5',
-      item: 'border-[2px] has-data-[state=checked]:bg-[var(--color-green-50)] cursor-pointer',
+      item: 'border-[2px] border-white bg-(--color-greyscale-50) rounded-xl has-data-[state=checked]:bg-(--color-green-50) cursor-pointer',
       indicator: 'after:size-2.5',
       base: 'size-5'
     }"
   >
     <template #label="{ item }">
-      <div class="flex items-center gap-4 py-[2px]">
+      <span class="flex items-center gap-4 py-[2px]">
         <BaseAvatar
-          background="gradient"
+          :background="item.value === model ? 'gradient' : 'white'"
           size="xl"
           :icon="item.icon"
         />
 
         <BaseHeading
           :text="item.label"
+          as="span"
           level="h8"
           weight="medium"
           class="text-[var(--color-gray-900)]"
         />
-      </div>
+      </span>
     </template>
   </BaseFormRadioGroup>
 </template>

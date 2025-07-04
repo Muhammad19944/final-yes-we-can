@@ -30,6 +30,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
 
 <template>
   <BaseSheet
+    shadow="shadow-2"
     :ui="{
       root: 'max-w-[535px] w-full py-8 px-10'
     }"
@@ -127,23 +128,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
         }"
       />
 
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <ButtonSocial
-          text="Google"
-          icon="i-ywc-google"
-          :ui="{
-            base: 'cursor-pointer'
-          }"
-        />
-
-        <ButtonSocial
-          text="Facebook"
-          icon="i-ywc-facebook"
-          :ui="{
-            base: 'cursor-pointer'
-          }"
-        />
-      </div>
+      <ButtonSocialList />
 
       <div class="flex items-center gap-2">
         <BaseHeading
@@ -152,7 +137,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
           color="text-(--color-greyscale-500)"
         />
 
-        <NuxtLinkLocale to="/">
+        <NuxtLinkLocale to="/auth/registration">
           <BaseHeading
             text="Ro’yxatdan o’tish"
             weight="medium"

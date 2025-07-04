@@ -1,5 +1,10 @@
 {
   "welcome": "Welcome",
   "collapse": "Collapse",
-  "expand": "Expand"
+  "expand": "Expand",
+  "term_and_condition": {
+    "term": "qonun-qoidalar",
+    "condition": "shartlar",
+    "text": "Ennnn Platformaning {term}iga va {condition}iga roziman"
+  }
 }

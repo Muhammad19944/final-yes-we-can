@@ -86,7 +86,7 @@ const model = useModel(props, 'modelValue')
       indicator: ['p-[3px]', ui?.indicator],
       icon: [ui?.icon],
       wrapper: ['-mt-[1px]', ui?.wrapper],
-      label: [text.level, text.weight, text.color, ui?.label],
+      label: ['text-(--color-greyscale-900)', ui?.label],
       description: [ui?.description]
     }"
     @change="emit('change', $event, model)"

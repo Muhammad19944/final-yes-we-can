@@ -8,8 +8,16 @@ interface NavigationHeader {
 </script>
 
 <script setup lang="ts">
+const route = useRoute()
+
 withDefaults(defineProps<NavigationHeader>(), {
   layout: 'default'
+})
+
+const defineContentWidth = computed(() => {
+  return {
+    'max-w-[865px]': route.fullPath.includes('skills')
+  }
 })
 </script>
 
@@ -18,7 +26,7 @@ withDefaults(defineProps<NavigationHeader>(), {
     <BaseContainer>
       <div
         class="flex items-center justify-between h-16"
-        :class="[ui?.content]"
+        :class="[defineContentWidth, ui?.content]"
       >
         <nuxt-link-locale
           to="/"

@@ -1,5 +1,6 @@
 <script lang="ts">
 export interface HeadingEntity {
+  as?: string
   text?: string
   level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8' | 'h9'
   weight?: 'light' | 'normal' | 'medium' | 'semi' | 'bold' | 'extra'
@@ -12,6 +13,7 @@ export interface HeadingEntity {
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<HeadingEntity>(), {
+  as: 'h1',
   level: 'h9'
 })
 
@@ -56,9 +58,12 @@ const defineWeight = computed(() => {
 </script>
 
 <template>
-  <h1 :class="[defineLevel, defineWeight, color, ui?.root]">
+  <component
+    :is="as"
+    :class="[defineLevel, defineWeight, color, ui?.root]"
+  >
     <slot>
       {{ text }}
     </slot>
-  </h1>
+  </component>
 </template>
