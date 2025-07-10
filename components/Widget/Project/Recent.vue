@@ -40,15 +40,15 @@ const tab = ref('draft')
     </div>
 
     <template v-if="tab === 'draft'">
-      <CardJobItem />
+      <CardProjectItem />
     </template>
 
     <template v-else-if="tab === 'announce_contract'">
-      <CardJobItem />
+      <CardProjectItem />
     </template>
 
     <template v-else>
-      <CardJobItem />
+      <CardProjectItem />
     </template>
   </div>
 </template>

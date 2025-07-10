@@ -1,14 +1,14 @@
 <script lang="ts">
-import type { NavigationJobMetaEntity, NavigationItemEntity } from '~/components/Navigation/JobMeta/NavigationJobMeta.vue'
+import type { NavigationProjectMetaEntity, NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
 
-interface NavigationJobGeneralEntity extends Pick<NavigationJobMetaEntity, 'compact' | 'separator'> {
+interface NavigationProjectGeneralEntity extends Pick<NavigationProjectMetaEntity, 'compact' | 'separator'> {
   append?: NavigationItemEntity
   ui?: NavigationItemEntity['ui']
 }
 </script>
 
 <script setup lang="ts">
-const props = withDefaults(defineProps<NavigationJobGeneralEntity>(), {
+const props = withDefaults(defineProps<NavigationProjectGeneralEntity>(), {
   separator: 'divider',
   compact: false
 })
@@ -47,7 +47,7 @@ const appendItem = (item: NavigationItemEntity) => {
 </script>
 
 <template>
-  <NavigationJobMeta
+  <NavigationProjectMeta
     :items="defineItems"
     :compact="compact"
     :separator="separator"

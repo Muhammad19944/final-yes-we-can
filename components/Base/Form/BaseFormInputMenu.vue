@@ -42,7 +42,7 @@ export type SelectMenuItem = _SelectMenuItem | AcceptableValue | boolean
 
 type SearchInputType = FormInputEntity & { size?: Exclude<FormInputEntity['size'], '3xs' | '2xs' | '2xl' | '3xl'> }
 
-export interface BaseFormSelectEntity<T, VK extends GetItemKeys<T> | undefined = undefined, M extends boolean = false> {
+export interface BaseFormInputMenuEntity<T, VK extends GetItemKeys<T> | undefined = undefined, M extends boolean = false> {
   id?: string
   placeholder?: string
   searchInput?: boolean | SearchInputType
@@ -81,11 +81,12 @@ export interface BaseFormSelectEntity<T, VK extends GetItemKeys<T> | undefined =
 </script>
 
 <script setup lang="ts" generic="T extends ArrayOrNested<SelectMenuItem> = ArrayOrNested<SelectMenuItem>">
-const props = withDefaults(defineProps<BaseFormSelectEntity<T> & { items?: T }>(), {
+const props = withDefaults(defineProps<BaseFormInputMenuEntity<T> & { items?: T }>(), {
   placeholder: 'Manzilni tanlang',
   searchInput: true,
   color: 'primary',
   variant: 'subtle',
+  size: '2xl',
   rounded: 'xl' as const
 })
 
@@ -101,7 +102,7 @@ const emit = defineEmits<{
 const { defineExtend: defineSize } = useExtendProps<CustomSizesType, ExtendSizesType, UiSizesType>(
   customSizes,
   computed(() => props.size),
-  'md'
+  'xl'
 )
 
 const defineExtendSize = computed(() => {
@@ -121,7 +122,7 @@ const model = useModel(props, 'modelValue')
 </script>
 
 <template>
-  <USelectMenu
+  <UInputMenu
     :id="id"
     v-model="model"
     :placeholder="placeholder"
@@ -135,8 +136,6 @@ const model = useModel(props, 'modelValue')
     :multiple="multiple"
     :ui="{
       base: [defineExtendSize, defineRounded, ui?.base],
-      value: [ui?.value],
-      placeholder: [ui?.placeholder],
       arrow: [ui?.arrow],
       content: [ui?.content],
       viewport: [ui?.viewport],
@@ -169,5 +168,5 @@ const model = useModel(props, 'modelValue')
         :index="index"
       />
     </template>
-  </USelectMenu>
+  </UInputMenu>
 </template>

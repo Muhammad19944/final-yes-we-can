@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { NavigationItemEntity } from '~/components/Navigation/JobMeta/NavigationJobMeta.vue'
+import type { NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
 
 interface JobGeneralEntity {
   card?: boolean
@@ -39,7 +39,7 @@ const item = ref<NavigationItemEntity>({
     />
 
     <div class="-ml-2">
-      <NavigationJobGeneral
+      <NavigationProjectGeneral
         :append="item"
         :ui="{
           link: 'pr-12 pl-2'

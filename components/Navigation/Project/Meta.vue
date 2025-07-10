@@ -12,7 +12,7 @@ export interface NavigationItemEntity {
   }
 }
 
-export interface NavigationJobMetaEntity {
+export interface NavigationProjectMetaEntity {
   items: NavigationItemEntity[]
   compact?: boolean
   separator?: 'dot' | 'divider'
@@ -20,7 +20,7 @@ export interface NavigationJobMetaEntity {
 </script>
 
 <script setup lang="ts">
-withDefaults(defineProps<NavigationJobMetaEntity>(), {
+withDefaults(defineProps<NavigationProjectMetaEntity>(), {
   separator: 'dot',
   compact: true
 })

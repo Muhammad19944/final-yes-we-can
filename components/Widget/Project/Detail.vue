@@ -22,15 +22,15 @@ const tab = ref('finished')
   <div class="job-detail-view">
     <div class="flex flex-wrap gap-6">
       <div class="flex-1 space-y-2">
-        <CardJobDescription />
+        <CardProjectDescription />
 
-        <CardJobGeneral />
+        <CardProjectGeneral />
 
-        <CardJobSize />
+        <CardProjectSize />
 
-        <CardJobFiles />
+        <CardProjectFiles />
 
-        <CardJobSkills />
+        <CardProjectSkills />
 
         <BaseSheet
           :ui="{
@@ -186,7 +186,7 @@ const tab = ref('finished')
                 }"
               />
 
-              <NavigationJobGeneral
+              <NavigationProjectGeneral
                 :compact="true"
                 separator="dot"
               />
@@ -203,7 +203,7 @@ const tab = ref('finished')
 
       <div class="max-w-[305px] w-full">
         <div class="sticky top-20">
-          <CardJobCustomerAside />
+          <CardProjectCustomerAside />
         </div>
       </div>
     </div>

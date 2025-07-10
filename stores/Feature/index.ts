@@ -1,4 +1,4 @@
-import { useApiFetch } from '~/composables/useApiFetch'
+import { useApiFetch } from '~/composables/useServerFetch'
 import type { ApiResponseEntity } from '~/types/utils'
 import type { FeatureStoreEntity, ProfessionEntity } from './types'
 

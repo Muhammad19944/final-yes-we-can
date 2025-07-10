@@ -70,7 +70,7 @@ const skills = ref([
       }"
     />
 
-    <NavigationJobGeneral
+    <NavigationProjectGeneral
       :compact="true"
       separator="dot"
     />

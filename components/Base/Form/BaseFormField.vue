@@ -71,7 +71,7 @@ const defineExtendLabel = computed(() => {
     case '3xl':
       return 'text-xl'
     default:
-      return ''
+      return 'text-[15px]'
   }
 })
 </script>

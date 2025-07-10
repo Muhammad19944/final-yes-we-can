@@ -20,18 +20,23 @@
           />
         </div>
 
-        <BaseButton
-          color="gradient"
-          label="Ish e’lon qilish"
-          icon="solar:add-circle-bold"
-          rounded
-          :ui="{
-            base: 'cursor-pointer'
-          }"
-        />
+        <NuxtLinkLocale
+          to="/project/create/title"
+          class="block"
+        >
+          <BaseButton
+            color="gradient"
+            label="Ish e’lon qilish"
+            icon="solar:add-circle-bold"
+            rounded
+            :ui="{
+              base: 'cursor-pointer'
+            }"
+          />
+        </NuxtLinkLocale>
       </header>
 
-      <WidgetJobRecent />
+      <WidgetProjectRecent />
     </div>
   </div>
 </template>

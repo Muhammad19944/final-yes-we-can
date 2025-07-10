@@ -28,24 +28,28 @@ const model = useModel(props, 'modelValue')
     :description-key="descriptionKey"
     :items="items"
     :default-value="defaultValue"
+    :orientation="orientation"
     color="primary"
     variant="card"
     indicator="end"
     size="lg"
     :ui="{
-      fieldset: 'gap-y-5',
-      item: 'border-[2px] border-white bg-(--color-greyscale-50) rounded-xl has-data-[state=checked]:bg-(--color-green-50) cursor-pointer',
-      indicator: 'after:size-2.5',
-      base: 'size-5'
+      fieldset: `gap-y-5`,
+      item: `border-[2px] border-white bg-(--color-greyscale-50) rounded-xl has-data-[state=checked]:bg-(--color-green-50) cursor-pointer ${ui?.item}`,
+      indicator: `after:size-2.5`,
+      base: `size-5`,
+      label: `${ui?.label}`
     }"
   >
     <template #label="{ item }">
       <span class="flex items-center gap-4 py-[2px]">
-        <BaseAvatar
-          :background="item.value === model ? 'gradient' : 'white'"
-          size="xl"
-          :icon="item.icon"
-        />
+        <template v-if="item.icon">
+          <BaseAvatar
+            :background="item.value === model ? 'gradient' : 'white'"
+            size="xl"
+            :icon="item.icon"
+          />
+        </template>
 
         <BaseHeading
           :text="item.label"
@@ -55,6 +59,13 @@ const model = useModel(props, 'modelValue')
           class="text-[var(--color-gray-900)]"
         />
       </span>
+    </template>
+
+    <template #description="{ item }">
+      <slot
+        name="description"
+        :item="item"
+      />
     </template>
   </BaseFormRadioGroup>
 </template>

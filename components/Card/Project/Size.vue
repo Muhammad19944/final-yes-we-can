@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { NavigationItemEntity } from '~/components/Navigation/JobMeta/NavigationJobMeta.vue'
+import type { NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
 
 interface JobSizeEntity {
   card?: boolean
@@ -57,7 +57,7 @@ const items = ref<NavigationItemEntity[]>([
     />
 
     <div class="-ml-2">
-      <NavigationJobMeta
+      <NavigationProjectMeta
         :items="items"
         :compact="false"
         separator="divider"
