@@ -1,5 +1,4 @@
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack'
-import { Locale, Token } from '~/shared/const'
 
 export const useClientFetch = async <
   DefaultT = unknown,
@@ -12,15 +11,7 @@ export const useClientFetch = async <
   options?: C & { onUploadProgress?: (progressEvent: ProgressEvent) => void }
 ) => {
   const { runWithContext, $toast } = useNuxtApp()
-  const accessToken = useCookie(Token.Access)
-  const locale = useCookie(Locale) || 'uz'
-
   const api = $fetch.create({
-    headers: {
-      Accept: 'application/json',
-      'Accept-Language': locale.value,
-      Authorization: accessToken.value ? `Bearer ${accessToken.value}` : ''
-    } as HeadersInit,
     async onResponseError({ response }) {
       const message = response?._data.message
       const splitMessage = (message as string).split('|')

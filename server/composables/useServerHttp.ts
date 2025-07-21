@@ -6,8 +6,6 @@ export const useServerHttp = (event: H3Event) => {
   const accessToken = getCookie(event, Token.Access)
   const locale = getCookie(event, Locale) || 'uz'
 
-  console.log('accessToken', accessToken)
-
   return $fetch.create({
     baseURL: 'https://api-dev.cando.uz/api/v1/',
     headers: {

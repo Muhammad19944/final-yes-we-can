@@ -10,8 +10,6 @@ interface CongratulationsEntity {
 </script>
 
 <script setup lang="ts">
-const { locale } = useI18n()
-
 const props = withDefaults(defineProps<CongratulationsEntity>(), {
   title: 'Tabriklaymiz!',
   description: 'Siz frilanser sifatida muvvafaqiyatli ro’yxatdan o’tdingiz!',
@@ -69,7 +67,6 @@ const model = useModel(props, 'modelValue')
             base: 'cursor-pointer'
           }"
           @click="emit('emit:up')"
-          @emit:up="() => navigateTo({ path: `/${locale}` })"
         >
           <BaseHeading
             :text="button.label"

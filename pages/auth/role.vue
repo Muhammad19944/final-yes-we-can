@@ -17,7 +17,7 @@ const items = ref<RadioPickerItemEntity[]>([
   },
   {
     label: 'Men frilanserman, ish izlamoqdaman',
-    value: 'freelancer',
+    value: 'developer',
     icon: 'solar:user-hand-up-bold'
   }
 ])
@@ -30,7 +30,7 @@ const handleRolePicker = async () => {
     setLoading(true)
     await useClientFetch('/api/account/account/me', {
       method: 'patch',
-      body: { role }
+      body: { role: role.value }
     })
     await navigateTo(`/${locale.value}/auth/${route}`)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

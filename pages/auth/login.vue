@@ -1,6 +1,6 @@
 <script lang="ts">
 import * as z from 'zod'
-import { useUserStore } from '~/stores/account/account/user'
+import { useAccountStore } from '~/stores/account'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
@@ -20,7 +20,7 @@ type Schema = z.output<typeof schema>
 const { locale } = useI18n()
 const { loading, setLoading } = useLoader()
 const { sleep } = useTimeout()
-const userStore = useUserStore()
+const accountStore = useAccountStore()
 
 definePageMeta({
   layout: 'auth'
@@ -38,11 +38,8 @@ const login = async (event: FormSubmitEvent<Schema>) => {
       method: 'post',
       body: event.data
     })
-    setTimeout(async () => {
-      await userStore.getAccount()
-      navigateTo(`/${locale.value}/${!userStore.account?.role ? 'auth/role-picker' : ''}/`)
-      console.log('after fetch')
-    }, 2000)
+    await accountStore.getAccount()
+    navigateTo(`/${locale.value}/${!accountStore.account?.role ? 'auth/role' : ''}`)
   } catch (error) {
     /* empty */
   } finally {
@@ -68,8 +65,6 @@ const login = async (event: FormSubmitEvent<Schema>) => {
         root: 'mb-0.5'
       }"
     />
-
-    <NuxtLinkLocale to="/auth/skills">Skills</NuxtLinkLocale>
 
     <BaseHeading
       text="Tizimga kirish uchun iltimos, ma’lumotlaringizni kiriting!"
@@ -124,7 +119,7 @@ const login = async (event: FormSubmitEvent<Schema>) => {
 
       <div class="flex justify-end mb-6">
         <NuxtLinkLocale
-          to="/"
+          to="/auth/forget"
           class="underline underline-offset-2 text-(--color-green-500)"
         >
           <BaseHeading

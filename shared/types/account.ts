@@ -1,4 +1,7 @@
-export interface UserModelEntity {
+export const accountRoleType = ['customer', 'developer'] as const
+export type AccountRoleType = (typeof accountRoleType)[number]
+
+export interface AccountModelEntity {
   username?: string
   first_name?: string
   last_name?: string
@@ -12,5 +15,5 @@ export interface UserModelEntity {
     technologies?: number[]
   }
   phone?: string
-  role?: 'customer' | 'developer'
+  role?: AccountRoleType
 }

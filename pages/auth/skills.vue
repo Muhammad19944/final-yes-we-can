@@ -17,6 +17,7 @@ type Schema = z.output<typeof schema>
 
 <script setup lang="ts">
 const router = useRouter()
+const { locale } = useI18n()
 const { loading, setLoading } = useLoader()
 const { loading: modal, setLoading: setModal } = useLoader()
 const { sleep } = useTimeout()
@@ -174,6 +175,9 @@ const handleSkills = async (event: FormSubmitEvent<Schema>) => {
       @emit:prev="router.go(-1)"
     />
 
-    <ModalCongratulations v-model="modal" />
+    <ModalCongratulations
+      v-model="modal"
+      @emit:up="() => navigateTo({ path: `/${locale}` })"
+    />
   </BaseForm>
 </template>

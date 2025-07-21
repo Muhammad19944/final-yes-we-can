@@ -1,4 +1,17 @@
-<script lang="ts" setup></script>
+<script lang="ts">
+import { useAccountStore } from '~/stores/account'
+import type { CookieEntity } from '~/shared/types/cookie'
+
+const accountStore = useAccountStore()
+</script>
+
+<script lang="ts" setup>
+const { Access } = await useClientFetch<CookieEntity>('/api/account/auth/cookie')
+
+if (Access) {
+  await accountStore.getAccount()
+}
+</script>
 
 <template>
   <div class="layout-wrapper flex flex-col min-h-[100vh] bg-zinc-50">

@@ -50,7 +50,7 @@ const handleChangePassword = async (event: FormSubmitEvent<Schema>) => {
       body: event.data
     })
     $toast({
-      title: `Parol muvaffaqiyatli o'zgartirildi`,
+      title: `Parol muvaffaqiyatli yangilandi`,
       icon: 'solar:check-circle-outline'
     })
     navigateTo(`/${locale.value}/auth/login`)

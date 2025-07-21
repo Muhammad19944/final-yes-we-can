@@ -1,14 +1,10 @@
 import { useServerHttp } from '~/server/composables/useServerHttp'
-import type { UserModelEntity } from '~/shared/types/user'
+import type { AccountModelEntity } from '~/shared/types/account'
 
 export default defineEventHandler(async (event) => {
   const http = useServerHttp(event)
-  const body: UserModelEntity = await readBody(event)
 
-  const response = await http<UserModelEntity>(`account/me/`, {
-    method: 'get',
-    body
+  return await http<AccountModelEntity>(`account/me/`, {
+    method: 'get'
   })
-
-  return response
 })
