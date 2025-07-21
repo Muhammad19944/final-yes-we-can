@@ -63,7 +63,7 @@ export interface FormInputEntity {
   trailingIcon?: string
   loading?: boolean
   loadingIcon?: string
-  modelValue?: null | string | number
+  modelValue?: null | string
   rounded?: boolean | ExtendSizesType
   maska?: string
   ui?: {

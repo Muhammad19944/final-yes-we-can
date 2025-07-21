@@ -1,4 +1,4 @@
-import { useApiFetch } from '~/composables/useServerFetch'
+import { useClientFetch } from '~/composables/useClientFetch'
 import type { ApiResponseEntity } from '~/types/utils'
 
 export interface LocationEntity {
@@ -9,5 +9,5 @@ export interface LocationEntity {
 }
 
 export const getLocation = async () => {
-  return await useApiFetch<ApiResponseEntity<LocationEntity[]>>('/feature/profession/')
+  return await useClientFetch<ApiResponseEntity<LocationEntity[]>>('/feature/profession/')
 }

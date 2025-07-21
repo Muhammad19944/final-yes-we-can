@@ -3,6 +3,8 @@ import formFieldTheme from '~/theme/formField'
 import inputTheme from '~/theme/input'
 import inputMenuTheme from '~/theme/inputMenu'
 import inputTagsTheme from '~/theme/inputTags'
+import modalTheme from '~/theme/modal'
+import pinInputTheme from '~/theme/pinInput'
 import radioGroupTheme from '~/theme/radioGroup'
 import selectMenuTheme from '~/theme/selectMenu'
 import stepperTheme from '~/theme/stepper'
@@ -18,6 +20,8 @@ export default defineAppConfig({
     ...inputTheme,
     ...inputMenuTheme,
     ...inputTagsTheme,
+    ...modalTheme,
+    ...pinInputTheme,
     ...radioGroupTheme,
     ...selectMenuTheme,
     ...stepperTheme,

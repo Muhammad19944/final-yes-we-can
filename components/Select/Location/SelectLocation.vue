@@ -1,16 +1,34 @@
-<script setup lang="ts">
-import { getLocation } from '~/services/Feature/location'
-const items = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
+<script lang="ts">
+import type { FetchResponseWrapperEntity } from '~/shared/types/utils'
+import type { LocationModelEntity } from '~/shared/types/location'
 
-const response = await getLocation()
+interface SelectLocationEntity {
+  modelValue?: number | string
+}
+</script>
+
+<script setup lang="ts">
+const props = defineProps<SelectLocationEntity>()
+const model = useModel(props, 'modelValue')
+
+const locations = ref<FetchResponseWrapperEntity<LocationModelEntity>>({
+  count: 0,
+  next: null,
+  previous: null,
+  results: []
+})
+
+locations.value = await useClientFetch('/api/feature/location', { method: 'get' })
 </script>
 
 <template>
-  <pre>{{ response }}</pre>
-  <div class="p-5 bg-white">
-    <BaseFormSelect
-      :items="items"
-      size="2xl"
-    />
-  </div>
+  <BaseFormSelect
+    v-model="model"
+    :items="locations.results"
+    value-key="id"
+    size="2xl"
+    :ui="{
+      base: 'w-full'
+    }"
+  />
 </template>

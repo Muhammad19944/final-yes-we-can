@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { RadioPickerItemEntity } from '~/components/Card/RadioPicker/RadioPicker.vue'
 
+const { locale } = useI18n()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
+
 definePageMeta({
   layout: 'auth'
 })
@@ -18,6 +22,25 @@ const items = ref<RadioPickerItemEntity[]>([
   }
 ])
 const role = ref('customer')
+
+const handleRolePicker = async () => {
+  const route = role.value === 'customer' ? 'login' : 'skills'
+
+  try {
+    setLoading(true)
+    await useClientFetch('/api/account/account/me', {
+      method: 'patch',
+      body: { role }
+    })
+    await navigateTo(`/${locale.value}/auth/${route}`)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    /* empty */
+  } finally {
+    await sleep()
+    setLoading(false)
+  }
+}
 </script>
 
 <template>
@@ -57,9 +80,11 @@ const role = ref('customer')
       size="2xl"
       rounded="xl"
       block
+      :loading="loading"
       :ui="{
         base: 'cursor-pointer'
       }"
+      @click="handleRolePicker"
     >
       Davom ettirish
     </BaseButton>

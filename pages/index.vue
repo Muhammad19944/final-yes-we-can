@@ -1,9 +1,10 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: 'redirect-home'
-})
+// definePageMeta({
+//   middleware: 'redirect-home'
+// })
 </script>
 
 <template>
-  <nuxt-page />
+  <div>Index page</div>
+  <!-- <nuxt-page /> -->
 </template>

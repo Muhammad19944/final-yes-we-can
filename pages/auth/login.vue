@@ -4,27 +4,46 @@ import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
   email: z.string().min(8, 'Enter correct number'),
-  password: z.string().min(8, 'Must be at least 8 characters')
+  password: z
+    .string()
+    .regex(/.{8,}/, { message: 'At least 8 characters' })
+    .regex(/\d/, { message: 'At least 1 number' })
+    .regex(/[a-z]/, { message: 'At least 1 lowercase letter' })
+    .regex(/[A-Z]/, { message: 'At least 1 uppercase letter' })
 })
 
 type Schema = z.output<typeof schema>
 </script>
 
 <script setup lang="ts">
-const toast = useToast()
+// const { locale } = useI18n()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
 
 definePageMeta({
   layout: 'auth'
 })
 
 const state = reactive<Partial<Schema>>({
-  email: undefined,
-  password: undefined
+  email: 'asd@gmail.com',
+  password: 'Muhammad1994'
 })
 
-const onSubmit = (event: FormSubmitEvent<Schema>) => {
-  toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-  console.log(event.data)
+const login = async (event: FormSubmitEvent<Schema>) => {
+  try {
+    setLoading(true)
+    await useClientFetch('/api/account/auth/login', {
+      method: 'post',
+      body: event.data
+    })
+    // navigateTo(`/${locale.value}/${!accountStore.account.role ? 'auth/role-picker' : 'jobs/list'}/`)
+    console.log('after fetch')
+  } catch (error) {
+    /* empty */
+  } finally {
+    await sleep()
+    setLoading(false)
+  }
 }
 </script>
 
@@ -45,6 +64,8 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
       }"
     />
 
+    <NuxtLinkLocale to="/auth/skills">Skills</NuxtLinkLocale>
+
     <BaseHeading
       text="Tizimga kirish uchun iltimos, ma’lumotlaringizni kiriting!"
       level="h8"
@@ -58,10 +79,10 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
       :ui="{
         root: 'mt-8'
       }"
-      @submit="onSubmit"
+      @submit="login"
     >
       <BaseFormField
-        label="Telefon raqam"
+        label="Elektron manzil"
         name="email"
         :ui="{
           root: 'mb-6'
@@ -69,9 +90,8 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
       >
         <BaseFormInput
           v-model="state.email"
-          maska="+### ## ### ## ##"
           size="2xl"
-          placeholder="Enter number"
+          placeholder="Elektron manzilni kirting"
           :ui="{
             root: 'w-full'
           }"
@@ -88,7 +108,9 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
         <BaseFormPassword
           v-model="state.password"
           size="2xl"
-          placeholder="Min. 8 ta belgi"
+          placeholder="Parolni kiriting"
+          set-password-strength
+          :password-strength-schema="schema.shape.password._def.checks"
           :ui="{
             root: 'w-full'
           }"
@@ -113,6 +135,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>) => {
         size="2xl"
         rounded="xl"
         block
+        :loading="loading"
         :ui="{
           base: 'cursor-pointer'
         }"

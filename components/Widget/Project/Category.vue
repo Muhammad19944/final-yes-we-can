@@ -1,23 +1,42 @@
-<script setup lang="ts">
-import { useFeatureStore } from '~/stores/Feature'
+<script lang="ts">
+import type { FetchResponseWrapperEntity, OptionEntity } from '~/shared/types/utils'
+import type { ProfessionModelEntity } from '~/shared/types/profession'
 import type { AccordionItemEntity } from '~/components/Base/Accordion/BaseAccordion.vue'
-import type { OptionEntity } from '~/types/utils'
 
-const featureStore = useFeatureStore()
+interface ProjectCategoryEntity {
+  modelValue?: (number | string)[]
+}
+</script>
 
-const items = ref<(AccordionItemEntity & { technologies: OptionEntity[] })[]>([])
-const selectedTechnologies = ref<OptionEntity[]>([])
+<script setup lang="ts">
+defineProps<ProjectCategoryEntity>()
+
+const emit = defineEmits(['update:modelValue'])
+
+const profession = ref<FetchResponseWrapperEntity<ProfessionModelEntity>>({
+  count: 0,
+  next: null,
+  previous: null,
+  results: []
+})
+const selected = ref<OptionEntity[]>([])
+
+profession.value = await useClientFetch('/api/feature/professions', { method: 'get' })
+
+const items = computed<(AccordionItemEntity & { technologies: OptionEntity[] })[]>(() => profession.value.results)
 
 const selectTechnology = (value: boolean | string | undefined, technology: OptionEntity, technologyId: number) => {
   if (typeof value === 'boolean' && value) {
-    selectedTechnologies.value.push(technology)
+    selected.value.push(technology)
   } else {
-    selectedTechnologies.value = selectedTechnologies.value.filter((technology) => technology.id !== technologyId)
+    selected.value = selected.value.filter((technology) => technology.id !== technologyId)
   }
-}
 
-await featureStore.getProfession()
-items.value = featureStore.profession
+  emit(
+    'update:modelValue',
+    selected.value.map((item) => item.id)
+  )
+}
 </script>
 
 <template>
@@ -34,7 +53,7 @@ items.value = featureStore.profession
 
       <div class="flex flex-wrap gap-2">
         <template
-          v-for="technology in selectedTechnologies"
+          v-for="technology in selected"
           :key="technology.id"
         >
           <BaseBadge
@@ -61,6 +80,7 @@ items.value = featureStore.profession
             :key="technology.name"
           >
             <BaseFormCheckbox
+              :id="technology.name"
               :label="technology.name"
               size="lg"
               :ui="{

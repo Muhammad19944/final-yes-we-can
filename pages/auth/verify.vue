@@ -3,6 +3,7 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
   code: z.string().min(4, 'Must be at least 4 characters')
 })
 
@@ -10,17 +11,57 @@ type Schema = z.output<typeof schema>
 </script>
 
 <script setup lang="ts">
+const route = useRoute()
+const { $toast } = useNuxtApp()
+const { locale } = useI18n()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
+
 definePageMeta({
   layout: 'auth'
 })
 
-const state = reactive<Partial<Schema>>({
+const model = reactive<Partial<Schema>>({
+  email: (route.query.email as string) ?? undefined,
   code: undefined
 })
+const forget = ref((route.query.forget as string) ?? undefined)
 
-const handleRegister = (event: FormSubmitEvent<Schema>) => {
+const handleVerify = async (event: FormSubmitEvent<Schema>) => {
+  const path = route.query.forget === 'true' ? 'change-password' : 'login'
+
+  try {
+    setLoading(true)
+    await useClientFetch('/api/account/verify/verify-code', {
+      method: 'post',
+      body: event.data
+    })
+    navigateTo(`/${locale.value}/auth/${path}`)
+  } catch (error) {
+    /* empty */
+  } finally {
+    await sleep()
+    setLoading(false)
+  }
+
+  console.log('path', path)
   console.log('event', event)
 }
+
+onMounted(async () => {
+  await useClientFetch('/api/account/verify/send-code', {
+    method: 'post',
+    body: {
+      email: model.email,
+      forget: forget.value === 'true'
+    }
+  })
+  $toast({
+    title: 'Emailga',
+    description: `Tasdiqlash kodi yuborildi`,
+    icon: 'solar:mailbox-outline'
+  })
+})
 </script>
 
 <template>
@@ -49,23 +90,41 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
 
     <BaseForm
       :schema="schema"
-      :state="state"
+      :state="model"
       :ui="{
         root: 'mt-8'
       }"
-      @submit="handleRegister"
+      @submit="handleVerify"
     >
       <BaseFormField
-        label="imuhammadibragimov1994@gmail.com"
+        label="Elektron manzil"
         name="email"
         :ui="{
           root: 'mb-6'
         }"
       >
         <BaseFormInput
-          v-model="state.code"
+          :model-value="model.email"
           size="2xl"
-          placeholder="Enter code"
+          placeholder="Elektron manzilni kirting"
+          readonly
+          :ui="{
+            root: 'w-full'
+          }"
+        />
+      </BaseFormField>
+
+      <BaseFormField
+        label="Tasdiqlovchi kod"
+        name="code"
+        :ui="{
+          root: 'mb-6'
+        }"
+      >
+        <BaseFormInput
+          v-model="model.code"
+          size="2xl"
+          placeholder="Tasdiqlovchi kodni kiriting"
           :ui="{
             root: 'w-full'
           }"
@@ -78,6 +137,7 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
         size="2xl"
         rounded="xl"
         block
+        :loading="loading"
         :ui="{
           base: 'cursor-pointer mt-6'
         }"

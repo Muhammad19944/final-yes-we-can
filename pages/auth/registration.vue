@@ -2,32 +2,62 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
-const schema = z.object({
-  email: z.string().email('Enter valid email'),
-  password: z.string().min(8, 'Must be at least 8 characters'),
-  password2: z.string().min(8, 'Must be at least 8 characters')
-})
+const schema = z
+  .object({
+    email: z.string().email({ message: 'Invalid email address' }),
+    password: z
+      .string()
+      .regex(/.{8,}/, { message: 'At least 8 characters' })
+      .regex(/\d/, { message: 'At least 1 number' })
+      .regex(/[a-z]/, { message: 'At least 1 lowercase letter' })
+      .regex(/[A-Z]/, { message: 'At least 1 uppercase letter' }),
+    password2: z.string().min(8, 'Must be at least 8 characters')
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.password2) {
+      ctx.addIssue({
+        path: ['password2'],
+        code: z.ZodIssueCode.custom,
+        message: 'Passwords do not match'
+      })
+    }
+  })
 
 type Schema = z.output<typeof schema>
 </script>
 
 <script setup lang="ts">
-const { t } = useI18n()
-// const toast = useToast()
+const { $toast } = useNuxtApp()
+const { t, locale } = useI18n()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
 
 definePageMeta({
   layout: 'auth'
 })
 
-const state = reactive<Partial<Schema>>({
-  email: undefined,
-  password: undefined,
-  password2: undefined
+const model = reactive<Partial<Schema>>({
+  email: 'imuhammadibragimov1994@gmail.com',
+  password: 'Muhammad1994',
+  password2: 'Muhammad1994'
 })
 const termAndCondition = ref(false)
 
-const handleRegister = (event: FormSubmitEvent<Schema>) => {
-  console.log('event', event)
+const handleRegister = async (event: FormSubmitEvent<Schema>) => {
+  try {
+    setLoading(true)
+    await useClientFetch('/api/account/auth/register', { method: 'post', body: event.data })
+    $toast({
+      title: `Siz muvaffaqiyatli ro'yxatdan o'tdingiz`,
+      icon: 'solar:check-circle-outline'
+    })
+    await navigateTo(`/${locale.value}/auth/verify?email=${model.email}`)
+  } catch (error) {
+    /* empty */
+  } finally {
+    await sleep()
+    setLoading(false)
+  }
 }
 </script>
 
@@ -57,23 +87,23 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
 
     <BaseForm
       :schema="schema"
-      :state="state"
+      :state="model"
       :ui="{
         root: 'mt-8'
       }"
       @submit="handleRegister"
     >
       <BaseFormField
-        label="Email"
+        label="Elektron manzilni kirting"
         name="email"
         :ui="{
           root: 'mb-6'
         }"
       >
         <BaseFormInput
-          v-model="state.email"
+          v-model="model.email"
           size="2xl"
-          placeholder="Enter email"
+          placeholder="Elektron manzilni kiriting"
           :ui="{
             root: 'w-full'
           }"
@@ -81,16 +111,18 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
       </BaseFormField>
 
       <BaseFormField
-        label="Telefon"
+        label="Parol"
         name="password"
         :ui="{
           root: 'mb-6'
         }"
       >
         <BaseFormPassword
-          v-model="state.password"
+          v-model="model.password"
           size="2xl"
-          placeholder="Enter password"
+          placeholder="Parolni kiriting"
+          set-password-strength
+          :password-strength-schema="schema._def.schema.shape.password._def.checks"
           :ui="{
             root: 'w-full'
           }"
@@ -98,16 +130,16 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
       </BaseFormField>
 
       <BaseFormField
-        label="Telefon"
+        label="Parol"
         name="password2"
         :ui="{
           root: 'mb-3'
         }"
       >
         <BaseFormPassword
-          v-model="state.password2"
+          v-model="model.password2"
           size="2xl"
-          placeholder="Repeat password"
+          placeholder="Parolni qayta tering"
           :ui="{
             root: 'w-full'
           }"
@@ -156,6 +188,7 @@ const handleRegister = (event: FormSubmitEvent<Schema>) => {
         rounded="xl"
         block
         :disabled="!termAndCondition"
+        :loading="loading"
         :ui="{
           base: 'cursor-pointer mt-6'
         }"

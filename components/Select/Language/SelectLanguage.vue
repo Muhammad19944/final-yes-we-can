@@ -8,6 +8,7 @@ interface SelectLanguageEntity extends _SelectMenuItem {
 </script>
 
 <script setup lang="ts">
+const currentLanguage = useCookie('current_language')
 const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 
@@ -45,6 +46,7 @@ watch(
 
     if (locale) {
       currentLocale.value = locale
+      currentLanguage.value = locale.value
     }
   },
   {

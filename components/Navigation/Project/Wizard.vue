@@ -286,6 +286,8 @@ onMounted(() => {
         </BaseSheet>
       </div>
 
+      <!-- TODO: -->
+      <!-- <NavigationFooterStepper /> yaratilgan pastdagi footerni o'rniga -->
       <footer class="bg-white sticky bottom-0">
         <div class="relative">
           <BaseProgress

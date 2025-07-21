@@ -10,19 +10,25 @@ export const useClientFetch = async <
   url: R,
   options?: C & { onUploadProgress?: (progressEvent: ProgressEvent) => void }
 ) => {
-  const { runWithContext } = useNuxtApp()
-  const token = useCookie<string | null>('Authorization')
+  const { runWithContext, $toast } = useNuxtApp()
 
   const api = $fetch.create({
-    baseURL: 'https://api-dev.cando.uz/api/v1',
-    headers: {
-      Accept: 'application/json',
-      ...(token.value && { Authorization: `Bearer ${token.value}` })
-    } as HeadersInit,
     async onResponseError({ response }) {
-      // if (response.status === 401) {
-      //   await runWithContext(() => navigateTo('/auth/login'))
-      // }
+      const message = response?._data.message
+      const splitMessage = (message as string).split('|')
+
+      if (response.status === 401) {
+        await runWithContext(() => navigateTo('/auth/login'))
+      }
+
+      for (const text in splitMessage) {
+        $toast({ title: splitMessage[text], color: 'error', icon: 'i-heroicons-exclamation-triangle' })
+      }
+
+      throw createError({
+        statusCode: response.status,
+        message: message ?? 'Unexpected error'
+      })
     }
   })
 
