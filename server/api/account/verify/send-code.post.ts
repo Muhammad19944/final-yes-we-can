@@ -13,14 +13,12 @@ export default defineEventHandler(async (event) => {
   const http = useServerHttp(event)
   const body: SendCodeRequestEntity = await readBody(event)
 
-  console.log('body', body)
+  const { message } = await http<SendCodeResponseEntity>(`account/send-code/`, {
+    method: 'post',
+    body
+  })
 
-  // const { message } = await http<SendCodeResponseEntity>(`account/send-code/`, {
-  //   method: 'post',
-  //   body
-  // })
-
-  // return {
-  //   message
-  // }
+  return {
+    message
+  }
 })

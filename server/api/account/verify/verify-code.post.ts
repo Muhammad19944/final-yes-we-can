@@ -14,15 +14,13 @@ export default defineEventHandler(async (event) => {
   const http = useServerHttp(event)
   const body: VerifyCodeRequestEntity = await readBody(event)
 
-  console.log('body', body)
+  const { account_id, email } = await http<VerifyCodeResponseEntity>(`account/verify-code/`, {
+    method: 'post',
+    body
+  })
 
-  // const { account_id, email } = await http<VerifyCodeResponseEntity>(`account/verify-code/`, {
-  //   method: 'post',
-  //   body
-  // })
-
-  // return {
-  //   account_id,
-  //   email
-  // }
+  return {
+    account_id,
+    email
+  }
 })

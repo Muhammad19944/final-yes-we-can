@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { _SelectMenuItem } from '~/components/Base/Form/BaseFormSelect.vue'
+import { Locale } from '~/shared/const'
 
 interface SelectLanguageEntity extends _SelectMenuItem {
   value: 'uz' | 'ru' | 'en'
@@ -8,7 +9,7 @@ interface SelectLanguageEntity extends _SelectMenuItem {
 </script>
 
 <script setup lang="ts">
-const currentLanguage = useCookie('current_language')
+const locale = useCookie(Locale)
 const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 
@@ -42,11 +43,11 @@ const currentLocale = ref<SelectLanguageEntity>({
 watch(
   () => route.fullPath.slice(1, 3),
   (value) => {
-    const locale = languages.value.find((language) => language.value === value)
+    const lang = languages.value.find((language) => language.value === value)
 
-    if (locale) {
-      currentLocale.value = locale
-      currentLanguage.value = locale.value
+    if (lang) {
+      currentLocale.value = lang
+      locale.value = lang.value
     }
   },
   {

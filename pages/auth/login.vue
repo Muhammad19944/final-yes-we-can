@@ -1,5 +1,6 @@
 <script lang="ts">
 import * as z from 'zod'
+import { useUserStore } from '~/stores/account/account/user'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = z.object({
@@ -16,16 +17,17 @@ type Schema = z.output<typeof schema>
 </script>
 
 <script setup lang="ts">
-// const { locale } = useI18n()
+const { locale } = useI18n()
 const { loading, setLoading } = useLoader()
 const { sleep } = useTimeout()
+const userStore = useUserStore()
 
 definePageMeta({
   layout: 'auth'
 })
 
 const state = reactive<Partial<Schema>>({
-  email: 'asd@gmail.com',
+  email: 'imuhammadibragimov1994@gmail.com',
   password: 'Muhammad1994'
 })
 
@@ -36,8 +38,11 @@ const login = async (event: FormSubmitEvent<Schema>) => {
       method: 'post',
       body: event.data
     })
-    // navigateTo(`/${locale.value}/${!accountStore.account.role ? 'auth/role-picker' : 'jobs/list'}/`)
-    console.log('after fetch')
+    setTimeout(async () => {
+      await userStore.getAccount()
+      navigateTo(`/${locale.value}/${!userStore.account?.role ? 'auth/role-picker' : ''}/`)
+      console.log('after fetch')
+    }, 2000)
   } catch (error) {
     /* empty */
   } finally {
