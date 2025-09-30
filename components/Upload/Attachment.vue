@@ -75,7 +75,10 @@ const uploadMock = async (file: MockupsEntity) => {
       </div>
 
       <template v-if="model?.length">
-        <div :class="[reverse ? '-order-1 mb-5' : 'mt-4', 'space-y-2', ui?.list]">
+        <div
+          class="w-full"
+          :class="[reverse ? '-order-1 mb-5' : 'mt-4', 'space-y-2', ui?.list]"
+        >
           <template
             v-for="(file, index) in model"
             :key="index"

@@ -43,11 +43,11 @@ const textWhite = computed(() => {
     :style="{
       width: customSize ? `${customSize}px` : undefined,
       height: customSize ? `${customSize}px` : undefined,
-      fontSize: customSize ? `${customSize / 2}px` : undefined
+      fontSize: customSize ? `${customSize / 2.5}px` : undefined
     }"
     :ui="{
       root: [backgroundWhite, backgroundGradient],
-      icon: ['w-1/2 h-1/2', textGradient, textWhite],
+      icon: [textGradient, textWhite],
       fallback: [textGradient, textWhite]
     }"
   />

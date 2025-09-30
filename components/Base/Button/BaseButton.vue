@@ -85,7 +85,7 @@ const { defineExtend: defineColor } = useExtendProps<CustomColorsType, ExtendCol
 const defineExtendColor = computed(() => {
   switch (defineColor.value.extend) {
     case 'greyscale':
-      return 'bg-[var(--color-greyscale-100)] text-[var(--color-greyscale-900)] hover:bg-[var(--color-greyscale-200)]'
+      return '!bg-(--color-greyscale-100) text-[var(--color-greyscale-900)] !hover:bg-[var(--color-greyscale-200)]'
     case 'white':
       return 'bg-white text-greyscale-900 hover:text-white'
     case 'gradient':
@@ -169,7 +169,7 @@ const defineBase = computed(() => {
     :to="to"
     :target="target"
     :ui="{
-      base: [defineBase, defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded, ui?.base],
+      base: [defineBase, defineExtendColor, defineExtendSize, defineExtendSquare, defineRounded, 'cursor-pointer', ui?.base],
       label: [ui?.label],
       leadingAvatar: [ui?.leadingAvatar],
       leadingAvatarSize: [ui?.leadingAvatarSize],

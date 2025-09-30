@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useRounded } from '~/composables/useRounded'
-import type { AcceptableValue, ArrayOrNested, ColorType, GetItemKeys, GetModelValue, SizeType, VariantType } from '~/types/libs'
+import type { AcceptableValue, ArrayOrNested, ColorType, GetItemKeys, GetModelValue, NestedItem, SizeType, VariantType } from '~/types/libs'
 import type { AvatarEntity } from '~/components/Base/Avatar/BaseAvatar.vue'
 import type { FormInputEntity } from '~/components/Base/Form/BaseFormInput.vue'
 
@@ -54,6 +54,8 @@ export interface BaseFormInputMenuEntity<T, VK extends GetItemKeys<T> | undefine
   defaultValue?: GetModelValue<T, VK, M> | any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   modelValue?: GetModelValue<T, VK, M> | any
+  valueKey?: GetItemKeys<T>
+  labelKey?: keyof NestedItem<T>
   multiple?: boolean
   rounded?: boolean | ExtendSizesType
   ui?: {
@@ -131,6 +133,8 @@ const model = useModel(props, 'modelValue')
     :variant="variant"
     :size="defineSize.ui"
     :required="required"
+    :value-key="valueKey"
+    :label-key="labelKey"
     :items="items"
     :default-value="defaultValue"
     :multiple="multiple"

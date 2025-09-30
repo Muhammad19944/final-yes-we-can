@@ -27,8 +27,8 @@ definePageMeta({
 })
 
 const state = reactive<Partial<Schema>>({
-  email: 'imuhammadibragimov1994@gmail.com',
-  password: 'Muhammad1994'
+  email: undefined,
+  password: undefined
 })
 
 const login = async (event: FormSubmitEvent<Schema>) => {

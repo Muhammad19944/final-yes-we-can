@@ -1,7 +1,10 @@
 <script lang="ts">
-export interface BaseTableEntity {
+import type { TableColumn, TableData, TableOptions } from '@nuxt/ui'
+
+export interface BaseTableEntity<T extends TableData = TableData> extends /* @vue-ignore */ TableOptions<T> {
   as?: string
-  data: unknown[]
+  data: T[]
+  columns?: TableColumn<T>[]
   ui?: {
     root?: string | string[]
     base?: string | string[]
@@ -18,7 +21,7 @@ export interface BaseTableEntity {
 }
 </script>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends TableData">
 withDefaults(defineProps<BaseTableEntity>(), {
   as: 'div'
 })
@@ -34,6 +37,7 @@ withDefaults(defineProps<BaseTableEntity>(), {
   >
     <UTable
       :data="data"
+      :columns="columns"
       :ui="{
         root: [ui?.root],
         base: [ui?.base],
@@ -41,7 +45,7 @@ withDefaults(defineProps<BaseTableEntity>(), {
         thead: [ui?.thead],
         tbody: [ui?.tbody],
         tr: [ui?.tr],
-        th: ['adsads', ui?.th],
+        th: [ui?.th],
         td: [ui?.td],
         separator: [ui?.separator],
         empty: [ui?.empty],

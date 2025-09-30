@@ -40,6 +40,7 @@ const items = ref<NavigationItemEntity[]>([
 </script>
 
 <template>
+  <!-- TODO: Refactor: CardProjectSheet komponenta yaratilgan shunga o'tkazish kerak -->
   <BaseSheet
     :card="card"
     :ui="{

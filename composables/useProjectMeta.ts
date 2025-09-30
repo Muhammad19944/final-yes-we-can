@@ -1,4 +1,4 @@
-import type { ProjectSizeType, ProjectDurationType, ProjectLevelType, ProjectType } from '~/types/utils'
+import type { ProjectSizeType, ProjectDurationType, ProjectLevelType, ProjectType } from '~/shared/types/project'
 
 interface ProjectMetaEntity<T> {
   id: string
@@ -87,10 +87,15 @@ export const useProjectMeta = () => {
     }
   ])
 
+  const currentLevel = (value: ProjectLevelType) => {
+    return level.value.find((item) => item.value === value)
+  }
+
   return {
     size,
     duration,
     level,
-    type
+    type,
+    currentLevel
   }
 }

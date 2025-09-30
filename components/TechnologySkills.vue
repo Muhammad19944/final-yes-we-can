@@ -1,8 +1,8 @@
 <script lang="ts">
-import type { BaseBadgeEntity } from '~/components/Base/Badge/BaseBadge.vue'
+import type { OptionEntity } from '~/shared/types/utils'
 
 interface TechnologySkillsEntity {
-  skills?: BaseBadgeEntity[]
+  skills?: OptionEntity[]
 }
 </script>
 
@@ -17,9 +17,9 @@ defineProps<TechnologySkillsEntity>()
       :key="skill.label"
     >
       <BaseBadge
-        :label="skill.label"
+        :label="skill.name"
         color="greyscale"
-        size="lg"
+        size="2xl"
       />
     </template>
   </div>

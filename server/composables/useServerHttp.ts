@@ -14,6 +14,15 @@ export const useServerHttp = (event: H3Event) => {
       Authorization: accessToken ? `Bearer ${accessToken}` : ''
     } as HeadersInit,
     onResponseError({ response }) {
+      console.log('response', response)
+
+      if (response.status === 401) {
+        deleteCookie(event, Token.Access)
+        deleteCookie(event, Token.Refresh)
+        deleteCookie(event, Token.Expires)
+        deleteCookie(event, Token.Account)
+      }
+
       if (isBackendError(response?._data)) {
         const errors = response?._data.errors
 

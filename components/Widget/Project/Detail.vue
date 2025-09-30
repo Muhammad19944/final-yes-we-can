@@ -65,7 +65,7 @@ const tab = ref('finished')
             :key="item"
           >
             <NuxtLinkLocale
-              to="/jobs"
+              to="/"
               class="flex items-center gap-6 w-full"
             >
               <div class="flex-1">
@@ -164,7 +164,7 @@ const tab = ref('finished')
             :key="item"
           >
             <NuxtLinkLocale
-              to="/jobs"
+              to="/"
               class="block w-full"
             >
               <BaseHeading

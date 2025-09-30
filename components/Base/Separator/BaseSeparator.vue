@@ -48,8 +48,8 @@ withDefaults(defineProps<BaseSeparatorEntity>(), {
     :decorative="decorative"
     :ui="{
       root: [ui?.root],
-      border: ['border-[var(--color-greyscale-200)]', ui?.border],
-      container: ['text-sm text-[var(--color-greyscale-400)] mx-6', container ? '' : 'hidden', ui?.container],
+      border: ['border-(--color-greyscale-200)', ui?.border],
+      container: ['text-sm text-(--color-greyscale-400) mx-6', container ? '' : 'hidden', ui?.container],
       icon: [ui?.icon],
       avatar: [ui?.avatar],
       avatarSize: [ui?.avatarSize],

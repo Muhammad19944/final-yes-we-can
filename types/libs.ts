@@ -34,3 +34,5 @@ export type IndicatorType = 'start' | 'end' | 'hidden'
 export type BorderTypes = 'solid' | 'dashed' | 'dotted'
 
 export type SingleOrMultiple = 'single' | 'multiple'
+
+export type SideType = 'top' | 'bottom' | 'right' | 'left'

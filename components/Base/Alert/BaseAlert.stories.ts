@@ -162,7 +162,7 @@ export const Examples: Story = {
           description="Buning uchun tarifingizni o’zgartiring!"
           decorative-icon="solar:medal-ribbons-star-bold-duotone"
           :actions="[
-            { label: 'O’zgartirish', color: 'success', variant: 'link', square: true, underline: true, to: '/jobs' }
+            { label: 'O’zgartirish', color: 'success', variant: 'link', square: true, underline: true, to: '/' }
           ]"
           :ui="{ container: 'px-5', decorativeIcon: 'rotate-[15deg] !-bottom-6 !right-0', actions: '!mt-0 !-ml-1.5' }"
           rounded="xl"

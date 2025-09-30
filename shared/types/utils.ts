@@ -1,3 +1,5 @@
+export type CrudType = 'create' | 'read' | 'update' | 'delete'
+
 export interface FetchResponseWrapperEntity<T> {
   count: number
   next: string | null

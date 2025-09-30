@@ -11,6 +11,7 @@ export const useClientFetch = async <
   options?: C & { onUploadProgress?: (progressEvent: ProgressEvent) => void }
 ) => {
   const { runWithContext, $toast } = useNuxtApp()
+
   const api = $fetch.create({
     async onResponseError({ response }) {
       const message = response?._data.message

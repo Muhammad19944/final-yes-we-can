@@ -5,6 +5,7 @@ export interface NavigationItemEntity {
   icon: string
   description?: string
   ui?: {
+    root?: string
     label?: string
     icon?: string
     description?: string
@@ -16,6 +17,9 @@ export interface NavigationProjectMetaEntity {
   items: NavigationItemEntity[]
   compact?: boolean
   separator?: 'dot' | 'divider'
+  ui?: NavigationItemEntity['ui'] & {
+    separator?: string
+  }
 }
 </script>
 
@@ -30,6 +34,8 @@ withDefaults(defineProps<NavigationProjectMetaEntity>(), {
   <BaseBreadcrumb
     :items="items"
     :ui="{
+      root: ui?.root,
+      separator: ui?.separator,
       list: 'gap-2',
       link: 'gap-1'
     }"

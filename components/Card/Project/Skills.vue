@@ -1,35 +1,30 @@
 <script lang="ts">
-import type { BaseBadgeEntity } from '~/components/Base/Badge/BaseBadge.vue'
+import type { CardProjectSheetEntity } from '~/components/Card/Project/Sheet.vue'
+import type { HeadingEntity } from '~/components/Base/Heading/BaseHeading.vue'
+import type { OptionEntity } from '~/shared/types/utils'
 
-interface JobSkillsEntity {
-  card?: boolean
-  skills?: BaseBadgeEntity[]
+interface JobSkillsEntity extends CardProjectSheetEntity, Pick<HeadingEntity, 'level'> {
+  skills?: OptionEntity[]
 }
 </script>
 
 <script setup lang="ts">
 withDefaults(defineProps<JobSkillsEntity>(), {
+  title: 'Talab etiladigan qobiliyatlar',
   card: true
 })
 </script>
 
 <template>
-  <BaseSheet
+  <CardProjectSheet
     :card="card"
-    :ui="{
-      root: 'py-4 px-6'
-    }"
+    :level="level"
+    :title="title"
   >
-    <BaseHeading
-      text="Talab etiladigan qobiliyatlar"
-      level="h7"
-      weight="semi"
-      color="text-(--color-greyscale-900)"
-      :ui="{
-        root: 'mb-3'
-      }"
-    />
-
     <TechnologySkills :skills="skills" />
-  </BaseSheet>
+
+    <template #actions>
+      <slot name="actions" />
+    </template>
+  </CardProjectSheet>
 </template>

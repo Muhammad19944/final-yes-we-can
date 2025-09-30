@@ -1,30 +1,31 @@
+<script lang="ts">
+import type { NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
+import type { OptionEntity } from '~/shared/types/utils'
+
+interface ProjectItemEntity {
+  date?: string
+  title?: string
+  description?: string
+  skills?: OptionEntity[]
+  navigations: NavigationItemEntity[]
+}
+</script>
+
 <script setup lang="ts">
-const skills = ref([
-  {
-    label: 'Figma'
-  },
-  {
-    label: 'UX/UI dizayn'
-  },
-  {
-    label: 'Dashboard'
-  },
-  {
-    label: 'Websayt'
-  }
-])
+const props = defineProps<ProjectItemEntity>()
+const formatDate = useDateFormat(props.date, 'DD.MM.YYYY HH:mm')
 </script>
 
 <template>
   <BaseSheet
     :ui="{
-      root: 'py-5 px-6'
+      root: 'cursor-pointer transition-shadow hover:shadow-50 py-5 px-6'
     }"
   >
     <div class="flex items-center justify-between mb-1">
       <div class="flex items-center gap-2">
         <BaseHeading
-          text="2 kun oldin"
+          :text="formatDate"
           weight="medium"
           color="text-(--color-greyscale-500)"
         />
@@ -48,19 +49,22 @@ const skills = ref([
     </div>
 
     <BaseHeading
-      text="Mobile app development"
-      level="h7"
+      :text="title"
+      level="h6"
       weight="semi"
       color="text-(--color-greyscale-900)"
     />
 
-    <BaseHeading
-      text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos excepturi tenetur reprehenderit eaque earum voluptatum ab accusantium, dicta doloribus perferendis aut natus voluptatem minus sed error a necessitatibus quibusdam. Quam."
-      color="text-(--color-greyscale-500)"
-      :ui="{
-        root: 'line-clamp-2 mt-1.5 mb-3'
-      }"
-    />
+    <template v-if="description">
+      <BaseHeading
+        :text="description"
+        weight="normal"
+        color="text-(--color-greyscale-500)"
+        :ui="{
+          root: `line-clamp-2 mt-1.5 ${skills?.length ? 'mb-3' : ''}`
+        }"
+      />
+    </template>
 
     <TechnologySkills :skills="skills" />
 
@@ -70,9 +74,11 @@ const skills = ref([
       }"
     />
 
-    <NavigationProjectGeneral
+    <NavigationProjectMeta :items="navigations" />
+
+    <!-- <NavigationProjectGeneral
       :compact="true"
       separator="dot"
-    />
+    /> -->
   </BaseSheet>
 </template>

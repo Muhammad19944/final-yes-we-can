@@ -67,7 +67,6 @@ const props = withDefaults(defineProps<BaseTabsEntity & { items?: T[] }>(), {
   unmountOnHide: true,
   border: true
 })
-
 const slots = defineSlots<{
   leading(props: { item: T; index: number }): unknown
   default(props: { item: T; index: number }): unknown
@@ -99,9 +98,16 @@ const defineExtendColor = computed(() => {
 })
 
 const defineRounded = computed(() => {
+  if (props.rounded) {
+    return {
+      list: 'rounded-[10px] asdasdasd',
+      indicator: 'rounded-lg'
+    }
+  }
+
   return {
-    list: 'rounded-[10px]',
-    indicator: 'rounded-lg'
+    list: '',
+    indicator: ''
   }
 })
 

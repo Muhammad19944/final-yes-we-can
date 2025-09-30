@@ -17,9 +17,7 @@ const props = withDefaults(defineProps<CongratulationsEntity>(), {
     label: 'Birinchi frilans loyihani topish'
   })
 })
-
 const emit = defineEmits<{ (e: 'emit:up'): void }>()
-
 const model = useModel(props, 'modelValue')
 </script>
 

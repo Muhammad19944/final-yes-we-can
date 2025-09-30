@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAccountStore } from '~/stores/account'
+
+const accountStore = useAccountStore()
+</script>
 
 <template>
   <div class="customer-view pt-14">
@@ -13,7 +17,7 @@
           />
 
           <BaseHeading
-            text="Kalimbetov!"
+            :text="accountStore.accountName"
             level="h3"
             weight="semi"
             color="text-(--color-greyscale-900)"

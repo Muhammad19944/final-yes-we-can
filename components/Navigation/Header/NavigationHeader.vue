@@ -1,6 +1,7 @@
 <script lang="ts">
 interface NavigationHeader {
   layout?: 'default' | 'auth'
+  credentialVisible?: boolean
   ui?: {
     content?: string
   }
@@ -41,11 +42,17 @@ const defineContentWidth = computed(() => {
           </nuxt-link-locale>
 
           <template v-if="layout !== 'auth'">
-            <div class="flex items-center justify-center flex-1 gap-6">content</div>
+            <div class="flex items-center justify-center flex-1 gap-6" />
           </template>
 
           <div class="flex items-center gap-4">
             <SelectLanguage />
+
+            <template v-if="credentialVisible">
+              <ClientOnly>
+                <DropdownAccount />
+              </ClientOnly>
+            </template>
           </div>
         </div>
       </BaseContainer>

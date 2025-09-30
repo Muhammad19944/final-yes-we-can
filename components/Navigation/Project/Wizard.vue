@@ -1,8 +1,11 @@
 <script lang="ts">
+import { useStorage } from '@vueuse/core'
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { useProjectStore } from '~/stores/Projects'
-import { stepTypes, type PrePublishStepTypes, type CrudType } from '~/types/utils'
+import { stepTypes, type PrePublishStepTypes, type ProjectCreateResponseEntity } from '~/shared/types/project'
+import type { CrudType } from '~/shared/types/utils'
+import { ProjectId } from '~/shared/const'
 
 interface WizardEntity {
   type?: Exclude<CrudType, 'update' | 'delete'>
@@ -29,8 +32,11 @@ interface StepMetaItemEntity {
 const route = useRoute()
 const router = useRouter()
 const { locale } = useI18n()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
 const stepper = useTemplateRef('stepper')
 const projectStore = useProjectStore()
+const projectId = useStorage(ProjectId, '')
 
 const props = withDefaults(defineProps<WizardEntity>(), {
   type: 'create'
@@ -59,7 +65,6 @@ const steppers = ref<StepItemEntity[]>([
     value: 'overview'
   }
 ])
-const step = ref(0)
 const stepMeta = ref<Record<PrePublishStepTypes, StepMetaItemEntity>>({
   title: {
     title: 'Loyihaning nomi',
@@ -95,6 +100,7 @@ const stepMeta = ref<Record<PrePublishStepTypes, StepMetaItemEntity>>({
     index: 5
   }
 })
+const preview = ref(false)
 
 const isStepTypes = (step: string): step is PrePublishStepTypes => {
   return (stepTypes as readonly string[]).includes(step)
@@ -123,7 +129,7 @@ const currentSchema = computed(() => {
     switch (lastPath) {
       case 'technologies':
         return z.object({
-          technologies: z.array(z.string()).nonempty()
+          technologies: z.array(z.any()).nonempty()
         })
       case 'size':
         return z.object({
@@ -134,7 +140,11 @@ const currentSchema = computed(() => {
         })
       case 'description':
         return z.object({
-          price: z.string({ message: 'Summani kiriting' })
+          price: z.string().min(3, { message: 'Summani kiriting' })
+        })
+      case 'overview':
+        return z.object({
+          profession: z.string().min(3, { message: `Maydon to'ldirilishi shart` })
         })
       default: // title
         return z.object({
@@ -147,34 +157,127 @@ const currentSchema = computed(() => {
     title: z.string().min(8, 'Must be at least 8 characters')
   })
 })
+// const currentProjectId = computed(() => projectId.value ?? route.params.slug)
 
-const createProject = async () => {
+const createProject = async (body: z.output<typeof currentSchema.value>) => {
   const lastPath = routeLastPath()
 
   if (isStepTypes(lastPath)) {
     switch (lastPath) {
       case 'technologies':
-        await projectStore.patchProject({ technologies: [1, 2, 3] })
+        await useClientFetch(`/api/project/technology`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'size',
+            id: projectId.value
+          }
+        })
+        break
+      case 'size':
+        await useClientFetch(`/api/project/size`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'description',
+            id: projectId.value
+          }
+        })
+        break
+      case 'description':
+        await useClientFetch(`/api/project/description`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'overview',
+            id: projectId.value
+          }
+        })
         break
       default: // title
-        await projectStore.createProject({ title: projectStore.projectRequest.title })
-        navigateTo(`/${locale.value}/project/create/technologies`)
+        // eslint-disable-next-line no-case-declarations
+        const { id } = await useClientFetch<ProjectCreateResponseEntity>('/api/project/create', { method: 'post', body })
+        // Чтобы не потерять id работы сохраняем в localStorage
+        // если в какой-то момент пользователь перезагружает страницу
+        projectId.value = id
     }
   }
 }
 
-const updateProject = () => {}
+const updateProject = async (body: z.output<typeof currentSchema.value>) => {
+  const lastPath = routeLastPath()
+
+  if (isStepTypes(lastPath)) {
+    switch (lastPath) {
+      case 'size':
+        await useClientFetch(`/api/project/size`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'description',
+            id: route.params.slug
+          }
+        })
+        break
+      case 'description':
+        await useClientFetch(`/api/project/description`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'overview',
+            id: route.params.slug
+          }
+        })
+        break
+      default: // technologies
+        await useClientFetch(`/api/project/technology`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'size',
+            id: route.params.slug
+          }
+        })
+    }
+  }
+}
+
+const getNextStep = (lastPath: string): string => {
+  switch (lastPath) {
+    case 'technologies':
+      return 'size'
+    case 'size':
+      return 'description'
+    case 'description':
+      return 'overview'
+    default:
+      return 'technologies'
+  }
+}
+
+const nextNavigation = async (mode: 'create' | 'show') => {
+  const lastPath = routeLastPath()
+  const nextStep = getNextStep(lastPath)
+
+  const basePath = mode === 'create' ? `/${locale.value}/project/create` : `/${locale.value}/project/show/${route.params.slug}`
+
+  await navigateTo(`${basePath}/${nextStep}`)
+}
 
 const submit = async (event: FormSubmitEvent<z.output<typeof currentSchema.value>>) => {
+  setLoading(true)
+
   if (props.type === 'create') {
-    await createProject()
+    await createProject(event.data)
+    await nextNavigation('create')
   } else {
-    updateProject()
+    await updateProject(event.data)
+    await nextNavigation('show')
   }
 
-  console.log(event.data)
-  // await navigateTo(`/${locale.value}/project/create/technologies`)
-  // stepperRef?.value.next()
+  await sleep()
+  setLoading(false)
+  stepperRef?.value.next()
 }
 
 const prevStep = () => {
@@ -189,6 +292,10 @@ onMounted(() => {
     stepperRef.value = _stepper.stepper
   }
 })
+
+onBeforeUnmount(() => {
+  projectId.value = ''
+})
 </script>
 
 <template>
@@ -196,13 +303,13 @@ onMounted(() => {
     <div class="max-w-[1200px] w-full mx-auto pt-10">
       <BaseStepper
         ref="stepper"
-        v-model="step"
+        :model-value="stepProgress"
         :items="steppers"
         disabled
       />
     </div>
 
-    <pre>{{ projectStore.projectRequest }}</pre>
+    <!-- <pre>{{ currentProjectId }}</pre> -->
 
     <BaseForm
       :schema="currentSchema"
@@ -286,45 +393,49 @@ onMounted(() => {
         </BaseSheet>
       </div>
 
-      <!-- TODO: -->
-      <!-- <NavigationFooterStepper /> yaratilgan pastdagi footerni o'rniga -->
-      <footer class="bg-white sticky bottom-0">
-        <div class="relative">
-          <BaseProgress
-            v-model="stepProgress"
-            size="sm"
-            :max="5"
-          />
-
-          <div class="max-w-[1035px] w-full mx-auto">
-            <div class="flex items-center justify-between h-16">
-              <BaseButton
-                label="Orqaga"
-                icon="solar:alt-arrow-left-outline"
-                color="greyscale"
-                size="lg"
-                :ui="{
-                  base: 'cursor-pointer'
-                }"
-                @click="prevStep"
-              />
-
-              <BaseButton
-                type="submit"
-                label="Davom ettirish"
-                icon="solar:alt-arrow-right-outline"
-                color="gradient"
-                size="lg"
-                trailing
-                :disabled="!stepperRef?.hasNext"
-                :ui="{
-                  base: 'cursor-pointer'
-                }"
-              />
-            </div>
-          </div>
-        </div>
-      </footer>
+      <NavigationFooterStepper
+        :progress="stepProgress"
+        progress-show
+        :prev="{
+          text: 'Orqaga',
+          disabled: !stepperRef?.hasPrev
+        }"
+        :next="{
+          text: 'Davom ettirish',
+          disabled: !stepperRef?.hasNext,
+          loading
+        }"
+        :ui="{
+          content: 'max-w-[1035px]'
+        }"
+        @emit:prev="prevStep"
+      >
+        <template
+          v-if="!stepperRef?.hasNext"
+          #next
+        >
+          <BaseButton
+            color="gradient"
+            size="lg"
+            trailing
+            :disabled="!projectStore.projectRequest.profession"
+            :ui="{
+              base: 'cursor-pointer'
+            }"
+            @click="preview = true"
+          >
+            <span class="px-6">Ko’rish</span>
+          </BaseButton>
+        </template>
+      </NavigationFooterStepper>
     </BaseForm>
+
+    <!-- Preview modal -->
+    <ModalProjectPreview
+      v-model:open="preview"
+      project-id="asd"
+      @emit:close="(value) => (preview = value)"
+    />
+    <!-- / Preview modal -->
   </div>
 </template>

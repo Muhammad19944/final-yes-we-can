@@ -1,3 +1,4 @@
+import avatarTheme from '~/theme/avatar'
 import containerTheme from '~/theme/container'
 import formFieldTheme from '~/theme/formField'
 import inputTheme from '~/theme/input'
@@ -15,6 +16,7 @@ import tooltipTheme from '~/theme/tooltip'
 
 export default defineAppConfig({
   ui: {
+    ...avatarTheme,
     ...containerTheme,
     ...formFieldTheme,
     ...inputTheme,

@@ -58,20 +58,22 @@ const emit = defineEmits(['emit:prev', 'emit:next'])
             @click="emit('emit:prev')"
           />
 
-          <BaseButton
-            type="submit"
-            :label="next?.text"
-            icon="solar:alt-arrow-right-outline"
-            color="gradient"
-            size="lg"
-            trailing
-            :disabled="next?.disabled"
-            :loading="next?.loading"
-            :ui="{
-              base: 'cursor-pointer'
-            }"
-            @click="emit('emit:next')"
-          />
+          <slot name="next">
+            <BaseButton
+              type="submit"
+              :label="next?.text"
+              icon="solar:alt-arrow-right-outline"
+              color="gradient"
+              size="lg"
+              trailing
+              :disabled="next?.disabled"
+              :loading="next?.loading"
+              :ui="{
+                base: 'cursor-pointer'
+              }"
+              @click="emit('emit:next')"
+            />
+          </slot>
         </div>
       </div>
     </div>

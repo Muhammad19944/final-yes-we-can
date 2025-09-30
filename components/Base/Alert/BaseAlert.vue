@@ -42,7 +42,7 @@ const defineColor = computed(() => {
     case 'success':
       return 'bg-(--color-green-75) text-(--color-green-500)'
     case 'warning':
-      return 'bg-(--color-warning-100) text-(--color-warning-500)'
+      return 'bg-(--color-warning-50) text-(--color-warning-500)'
     case 'error':
       return 'bg-(--color-critic-100) text-(--color-critic-500)'
     case 'neutral':
@@ -134,7 +134,7 @@ const slots = useSlots()
       <UIcon
         :name="decorativeIcon"
         :class="ui?.decorativeIcon"
-        class="absolute right-3 -bottom-7 size-24"
+        class="absolute right-3 -bottom-7 size-22 opacity-60"
       />
     </template>
 

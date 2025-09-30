@@ -13,7 +13,7 @@ const customColors = ['greyscale', 'white'] as const
 type CustomColorsType = (typeof customColors)[number]
 
 type UiColorsType = ColorType
-type ExtendColorsType = ColorType | CustomColorsType
+export type ExtendColorsType = ColorType | CustomColorsType
 
 /**
  * The Nuxt UI Button component supports size
@@ -107,8 +107,15 @@ const { defineExtend: defineSize } = useExtendProps<CustomSizesType, ExtendSizes
 
 const defineExtendSize = computed(() => {
   switch (defineSize.value.extend) {
-    case '2xl':
-      return 'px-3.5 py-1.5 text-base'
+    case '2xl': {
+      const classNames = 'px-3 py-1 text-sm'
+
+      if (props.closable) {
+        return `${classNames} pr-1.5`
+      }
+
+      return classNames
+    }
     default:
       return ''
   }

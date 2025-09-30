@@ -6,3 +6,5 @@ export const Token = {
 }
 
 export const Locale = 'Locale'
+
+export const ProjectId = 'ProjectId'

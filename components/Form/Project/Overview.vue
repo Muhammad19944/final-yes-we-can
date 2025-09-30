@@ -15,6 +15,7 @@ watch(files, () => {
   <div class="project-overview-view">
     <BaseFormField
       label="Tavsif"
+      required
       name="profession"
       :ui="{
         container: 'mb-6'

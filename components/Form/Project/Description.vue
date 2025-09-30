@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useProjectStore } from '~/stores/Projects'
 import type { RadioPickerItemEntity } from '~/components/Card/RadioPicker/RadioPicker.vue'
+import { formatCurrency } from '~/utils'
 
 const projectStore = useProjectStore()
 
@@ -18,6 +19,13 @@ const items = ref<RadioPickerItemEntity[]>([
   }
 ])
 const role = ref('fixed')
+
+const price = computed({
+  get: () => formatCurrency(Number(projectStore.projectRequest.price) || 0),
+  set: (val: string) => {
+    projectStore.projectRequest.price = val.replace(/\s/g, '')
+  }
+})
 </script>
 
 <template>
@@ -78,9 +86,10 @@ const role = ref('fixed')
       <BaseFormField
         label="Narx"
         name="price"
+        required
       >
         <BaseFormInput
-          v-model="projectStore.projectRequest.price"
+          v-model="price"
           size="2xl"
           placeholder="Narxni kiriting"
           :ui="{

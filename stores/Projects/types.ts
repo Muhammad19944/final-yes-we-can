@@ -1,4 +1,4 @@
-import type { ProjectType, ProjectLevelType, ProjectDurationType, ProjectSizeType, StepTypes } from '~/types/utils'
+import type { ProjectType, ProjectLevelType, ProjectDurationType, ProjectSizeType, StepTypes } from '~/shared/types/project'
 
 export interface ProjectCreateRequestEntity {
   title?: string

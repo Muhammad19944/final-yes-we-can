@@ -57,10 +57,21 @@
   --color-critic-500: #ff5757;
   --color-critic-600: #ff2200;
 
-  --shadow-10: 0px 1px 2px 0px #0000000f;
-  --shadow-20: 0px 1px 2px 0px #030c2b0f, 0px 2px 4px 0px #161c270a;
+  --shadow-10: 0 1px 2px 0 #0000000f;
+  --shadow-20: 0 1px 2px 0 #030c2b0f, 0px 2px 4px 0px #161c270a;
+  --shadow-50: 0 16px 32px -20px #00000014;
 }
 
 :root {
   --ui-container: var(--container-width);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }

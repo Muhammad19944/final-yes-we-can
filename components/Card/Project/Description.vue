@@ -1,9 +1,10 @@
 <script lang="ts">
-interface JobDescriptionEntity {
-  label?: string
+import type { CardProjectSheetEntity } from '~/components/Card/Project/Sheet.vue'
+import type { HeadingEntity } from '~/components/Base/Heading/BaseHeading.vue'
+
+interface JobDescriptionEntity extends CardProjectSheetEntity, Pick<HeadingEntity, 'level'> {
   time?: string
   content?: string
-  card?: boolean
 }
 </script>
 
@@ -14,48 +15,47 @@ withDefaults(defineProps<JobDescriptionEntity>(), {
 </script>
 
 <template>
-  <BaseSheet
+  <CardProjectSheet
     :card="card"
-    :ui="{
-      root: 'py-4 px-6'
-    }"
+    :level="level"
+    :title="title"
   >
-    <BaseHeading
-      :text="label"
-      level="h7"
-      weight="semi"
-      color="text-(--color-greyscale-900)"
-    />
+    <template #actions>
+      <slot name="actions" />
+    </template>
 
-    <BaseHeading
-      :text="time"
-      weight="medium"
-      color="text-(--color-greyscale-500)"
-      :ui="{
-        root: 'mt-0.5'
-      }"
-    />
+    <template #description>
+      <slot name="description" />
+      <!-- <BaseHeading
+        :text="time"
+        weight="medium"
+        color="text-(--color-greyscale-500)"
+        :ui="{
+          root: 'mt-0.5'
+        }"
+      />
 
-    <BaseSeparator
-      :ui="{
-        root: 'my-2'
-      }"
-    />
+      <BaseSeparator
+        :ui="{
+          root: 'my-2'
+        }"
+      />
 
-    <BaseHeading
-      text="Tavsif"
-      level="h8"
-      weight="semi"
-      color="text-(--color-greyscale-900)"
-      :ui="{
-        root: 'mb-1'
-      }"
-    />
+      <BaseHeading
+        text="Tavsif"
+        level="h8"
+        weight="semi"
+        color="text-(--color-greyscale-900)"
+        :ui="{
+          root: 'mb-1'
+        }"
+      /> -->
+    </template>
 
     <BaseCollapsible>
       <BaseHeading color="text-(--color-greyscale-600)">
         {{ content }}
       </BaseHeading>
     </BaseCollapsible>
-  </BaseSheet>
+  </CardProjectSheet>
 </template>

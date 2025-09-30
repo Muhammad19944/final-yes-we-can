@@ -37,7 +37,7 @@ withDefaults(defineProps<BaseStepperEntity>(), {
   size: 'md',
   color: 'primary',
   orientation: 'horizontal',
-  linear: true
+  linear: false
 })
 
 defineSlots<{

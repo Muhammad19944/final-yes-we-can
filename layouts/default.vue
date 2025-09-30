@@ -6,20 +6,22 @@ const accountStore = useAccountStore()
 </script>
 
 <script lang="ts" setup>
-const { Access } = await useClientFetch<CookieEntity>('/api/account/auth/cookie')
+const { data } = await useFetch<CookieEntity>('/api/account/auth/cookie')
 
-if (Access) {
+if (data.value?.Access) {
   await accountStore.getAccount()
 }
 </script>
 
 <template>
   <div class="layout-wrapper flex flex-col min-h-[100vh] bg-zinc-50">
-    <NavigationHeader />
+    <NavigationHeader :credential-visible="true" />
 
     <div class="flex flex-col flex-1">
       <slot />
     </div>
+
+    <NavigationFooterMain />
   </div>
 </template>
 

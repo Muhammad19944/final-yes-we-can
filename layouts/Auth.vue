@@ -4,6 +4,7 @@
   <div class="auth-layout flex flex-col min-h-[100vh]">
     <NavigationHeader
       layout="auth"
+      :credential-visible="false"
       :ui="{
         content: 'max-w-[535px] w-full mx-auto'
       }"

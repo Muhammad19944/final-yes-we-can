@@ -37,9 +37,9 @@ definePageMeta({
 })
 
 const model = reactive<Partial<Schema>>({
-  email: 'imuhammadibragimov1994@gmail.com',
-  password: 'Muhammad1994',
-  password2: 'Muhammad1994'
+  email: undefined,
+  password: undefined,
+  password2: undefined
 })
 const termAndCondition = ref(false)
 

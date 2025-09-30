@@ -11,6 +11,9 @@ export interface AvatarLabeledEntity extends AvatarEntity {
   ui?: {
     root?: string | string[]
     avatar?: string | string[]
+    content?: string | string[]
+    label?: string
+    subLabel?: string
   }
 }
 </script>
@@ -21,7 +24,7 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
 
 <template>
   <div
-    class="flex items-start gap-4"
+    class="flex items-start gap-3"
     :class="[ui?.root]"
   >
     <div
@@ -42,7 +45,10 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
       <slot name="chip" />
     </div>
 
-    <div class="space-y-0.5">
+    <div
+      class="space-y-0.5"
+      :class="[ui?.content]"
+    >
       <div class="flex items-center gap-2">
         <slot name="label">
           <BaseHeading
@@ -50,6 +56,9 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
             level="h8"
             weight="semi"
             color="text-greyscale-900"
+            :ui="{
+              root: ui?.label
+            }"
           />
         </slot>
 
@@ -61,6 +70,9 @@ withDefaults(defineProps<AvatarLabeledEntity>(), {})
           :text="subLabel"
           weight="medium"
           color="text-greyscale-900"
+          :ui="{
+            root: ui?.subLabel
+          }"
         />
       </slot>
     </div>

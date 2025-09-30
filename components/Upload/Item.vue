@@ -29,7 +29,7 @@ const emit = defineEmits(['emit:close'])
       />
     </div>
 
-    <div class="flex-1">
+    <div class="flex-1 text-left">
       <slot name="title">
         <BaseHeading
           :text="title"
