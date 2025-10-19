@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<CongratulationsEntity>(), {
     label: 'Birinchi frilans loyihani topish'
   })
 })
-const emit = defineEmits<{ (e: 'emit:up'): void }>()
+const emit = defineEmits<{ (e: 'emit:navigate'): void }>()
 const model = useModel(props, 'modelValue')
 </script>
 
@@ -42,7 +42,7 @@ const model = useModel(props, 'modelValue')
             weight="semi"
             color="text-(--color-greyscale-900)"
             :ui="{
-              root: 'mb-1'
+              root: 'mb-3'
             }"
           />
 
@@ -56,7 +56,7 @@ const model = useModel(props, 'modelValue')
 
         <BaseButton
           type="submit"
-          size="3xl"
+          size="2xl"
           rounded="xl"
           variant="solid"
           primary-gradient
@@ -64,7 +64,7 @@ const model = useModel(props, 'modelValue')
           :ui="{
             base: 'cursor-pointer'
           }"
-          @click="emit('emit:up')"
+          @click="emit('emit:navigate')"
         >
           <BaseHeading
             :text="button.label"

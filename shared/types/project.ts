@@ -18,20 +18,29 @@ export type StepTypes = (typeof stepTypes)[number]
 
 export type PrePublishStepTypes = Exclude<StepTypes, 'published'>
 
-export interface ProjectModelResponseEntity {
+export interface ProjectBaseEntity {
+  price?: string
+  price_from?: string
+  price_to?: string
+  type?: ProjectType
+  level?: ProjectLevelType
+  duration?: ProjectDurationType
+  size?: ProjectSizeType
+  title?: string
+  profession?: string
+  step?: StepTypes
+}
+
+export interface ProjectModelRequestEntity extends ProjectBaseEntity {
+  location?: number
+  technologies: OptionEntity[]
+  files?: number[]
+}
+
+export interface ProjectModelResponseEntity extends ProjectBaseEntity {
   id: string
-  price: string
-  price_to: string
-  price_from: string
   price_measure: string
-  type: ProjectType
-  level: ProjectLevelType
-  duration: ProjectDurationType
-  size: ProjectSizeType
-  step: StepTypes
   location: LocationModelEntity
-  profession: string
-  title: string
   technologies: OptionEntity[]
   payment_verified: boolean
   updated_at: string

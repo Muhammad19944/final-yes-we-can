@@ -1,4 +1,6 @@
 <script lang="ts">
+import { useAccountStore } from '~/stores/account'
+
 interface NavigationHeader {
   layout?: 'default' | 'auth'
   credentialVisible?: boolean
@@ -10,6 +12,7 @@ interface NavigationHeader {
 
 <script setup lang="ts">
 const route = useRoute()
+const accountStore = useAccountStore()
 
 withDefaults(defineProps<NavigationHeader>(), {
   layout: 'default'
@@ -50,7 +53,9 @@ const defineContentWidth = computed(() => {
 
             <template v-if="credentialVisible">
               <ClientOnly>
-                <DropdownAccount />
+                <template v-if="accountStore.isLoggedIn">
+                  <DropdownAccount />
+                </template>
               </ClientOnly>
             </template>
           </div>

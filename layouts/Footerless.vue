@@ -17,7 +17,7 @@ if (data.value?.Access) {
   <div class="footerless-layout flex flex-col min-h-[100vh]">
     <NavigationHeader :credential-visible="true" />
 
-    <div class="flex-1 bg-zinc-50">
+    <div class="flex flex-col flex-1 bg-zinc-50">
       <slot />
     </div>
   </div>

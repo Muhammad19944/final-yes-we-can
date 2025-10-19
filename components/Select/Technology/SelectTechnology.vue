@@ -2,7 +2,7 @@
 import type { FetchResponseWrapperEntity, OptionEntity } from '~/shared/types/utils'
 
 interface SelectTechnologyEntity {
-  modelValue?: number[]
+  modelValue?: OptionEntity[]
 }
 </script>
 
@@ -31,7 +31,6 @@ if (results.value) {
   <BaseFormInputMenu
     v-model="model"
     :items="data.results"
-    value-key="id"
     label-key="name"
     multiple
     placeholder="Qobiliyatlarni tanlang"

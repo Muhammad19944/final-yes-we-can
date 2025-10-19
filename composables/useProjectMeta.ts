@@ -87,8 +87,20 @@ export const useProjectMeta = () => {
     }
   ])
 
-  const currentLevel = (value: ProjectLevelType) => {
+  const currentSize = (value: ProjectSizeType = 'small') => {
+    return size.value.find((item) => item.value === value)
+  }
+
+  const currentDuration = (value: ProjectDurationType = 'one_to_three') => {
+    return duration.value.find((item) => item.value === value)
+  }
+
+  const currentLevel = (value: ProjectLevelType = 'junior') => {
     return level.value.find((item) => item.value === value)
+  }
+
+  const currentType = (value: ProjectType = 'salary') => {
+    return type.value.find((item) => item.value === value)
   }
 
   return {
@@ -96,6 +108,9 @@ export const useProjectMeta = () => {
     duration,
     level,
     type,
-    currentLevel
+    currentSize,
+    currentDuration,
+    currentLevel,
+    currentType
   }
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useStorage } from '@vueuse/core'
+import { useStorage, isClient } from '@vueuse/core'
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import { useProjectStore } from '~/stores/Projects'
@@ -101,6 +101,8 @@ const stepMeta = ref<Record<PrePublishStepTypes, StepMetaItemEntity>>({
   }
 })
 const preview = ref(false)
+const congratulation = ref(false)
+const isLastStepCreated = ref(false)
 
 const isStepTypes = (step: string): step is PrePublishStepTypes => {
   return (stepTypes as readonly string[]).includes(step)
@@ -120,7 +122,13 @@ const currentStepMeta = computed(() => {
 
   return stepMeta.value.title
 })
-const stepProgress = computed(() => currentStepMeta.value.index - 1)
+const stepProgress = computed(() => {
+  if (isLastStepCreated.value) {
+    return currentStepMeta.value.index
+  }
+
+  return currentStepMeta.value.index - 1
+})
 
 const currentSchema = computed(() => {
   const lastPath = routeLastPath()
@@ -157,7 +165,6 @@ const currentSchema = computed(() => {
     title: z.string().min(8, 'Must be at least 8 characters')
   })
 })
-// const currentProjectId = computed(() => projectId.value ?? route.params.slug)
 
 const createProject = async (body: z.output<typeof currentSchema.value>) => {
   const lastPath = routeLastPath()
@@ -194,12 +201,25 @@ const createProject = async (body: z.output<typeof currentSchema.value>) => {
           }
         })
         break
-      default: // title
-        // eslint-disable-next-line no-case-declarations
+      case 'overview':
+        // Финальный шаг создания проекта
+        await useClientFetch(`/api/project/overview`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'overview',
+            id: projectId.value
+          }
+        })
+        isLastStepCreated.value = true
+        break
+      default: {
+        // title
         const { id } = await useClientFetch<ProjectCreateResponseEntity>('/api/project/create', { method: 'post', body })
         // Чтобы не потерять id работы сохраняем в localStorage
         // если в какой-то момент пользователь перезагружает страницу
         projectId.value = id
+      }
     }
   }
 }
@@ -229,6 +249,18 @@ const updateProject = async (body: z.output<typeof currentSchema.value>) => {
           }
         })
         break
+      case 'overview': {
+        await useClientFetch(`/api/project/overview`, {
+          method: 'patch',
+          body: {
+            body,
+            step: 'overview',
+            id: route.params.slug
+          }
+        })
+        isLastStepCreated.value = true
+        break
+      }
       default: // technologies
         await useClientFetch(`/api/project/technology`, {
           method: 'patch',
@@ -250,6 +282,8 @@ const getNextStep = (lastPath: string): string => {
       return 'description'
     case 'description':
       return 'overview'
+    case 'overview':
+      return 'overview'
     default:
       return 'technologies'
   }
@@ -265,6 +299,8 @@ const nextNavigation = async (mode: 'create' | 'show') => {
 }
 
 const submit = async (event: FormSubmitEvent<z.output<typeof currentSchema.value>>) => {
+  const lastPath = routeLastPath()
+
   setLoading(true)
 
   if (props.type === 'create') {
@@ -277,12 +313,29 @@ const submit = async (event: FormSubmitEvent<z.output<typeof currentSchema.value
 
   await sleep()
   setLoading(false)
-  stepperRef?.value.next()
+
+  if (lastPath !== 'overview') {
+    stepperRef?.value.next()
+  }
+}
+
+const publish = () => {
+  preview.value = false
+  congratulation.value = true
 }
 
 const prevStep = () => {
   router.go(-1)
   stepperRef?.value.prev()
+}
+
+const modalCongratulationsNavigate = async () => {
+  await navigateTo({
+    path: `/${locale.value}/profile`,
+    query: { status: 'announce', p: 1 }
+  })
+
+  congratulation.value = false
 }
 
 onMounted(() => {
@@ -291,10 +344,20 @@ onMounted(() => {
   if (_stepper) {
     stepperRef.value = _stepper.stepper
   }
+
+  // Если мы находимся на последнем шаге и проект еще не создан
+  // значит нужно создать проект перед просмотром
+  if (projectStore.projectRequest.profession) {
+    isLastStepCreated.value = true
+  }
 })
 
 onBeforeUnmount(() => {
-  projectId.value = ''
+  projectStore.actionProjectResetModel()
+
+  if (isClient) {
+    window.localStorage.removeItem(ProjectId)
+  }
 })
 </script>
 
@@ -308,8 +371,6 @@ onBeforeUnmount(() => {
         disabled
       />
     </div>
-
-    <!-- <pre>{{ currentProjectId }}</pre> -->
 
     <BaseForm
       :schema="currentSchema"
@@ -402,7 +463,6 @@ onBeforeUnmount(() => {
         }"
         :next="{
           text: 'Davom ettirish',
-          disabled: !stepperRef?.hasNext,
           loading
         }"
         :ui="{
@@ -410,8 +470,9 @@ onBeforeUnmount(() => {
         }"
         @emit:prev="prevStep"
       >
+        <!-- disabled: !stepperRef?.hasNext -->
         <template
-          v-if="!stepperRef?.hasNext"
+          v-if="isLastStepCreated"
           #next
         >
           <BaseButton
@@ -430,12 +491,25 @@ onBeforeUnmount(() => {
       </NavigationFooterStepper>
     </BaseForm>
 
-    <!-- Preview modal -->
-    <ModalProjectPreview
-      v-model:open="preview"
-      project-id="asd"
-      @emit:close="(value) => (preview = value)"
-    />
-    <!-- / Preview modal -->
+    <template v-if="preview">
+      <ModalProjectPreview
+        v-model:open="preview"
+        :project-id="route.params.slug as string ?? projectId"
+        @emit:close="(value) => (preview = value)"
+        @emit:publish="publish"
+      />
+    </template>
+
+    <template v-if="congratulation">
+      <ModalCongratulations
+        v-model:open="congratulation"
+        title="Tabriklaymiz!"
+        description="Siz loyihangiz muvvafaqiyatli e’lon qilindi! Loyihalaringizni o’zingizning Dashborad sahifangiz orqali boshqarishingiz mumkin."
+        :button="{
+          label: 'Dashboardga o’tish'
+        }"
+        @emit:navigate="modalCongratulationsNavigate"
+      />
+    </template>
   </div>
 </template>

@@ -11,7 +11,8 @@ const defaultAccount = {
     location: undefined,
     visible: true,
     level: undefined,
-    technologies: []
+    technologies: [],
+    balance: 0
   },
   phone: undefined,
   role: undefined
@@ -37,19 +38,6 @@ export const useAccountStore = defineStore('useAccountStore', () => {
     if (data.value) {
       account.value = data.value
     }
-
-    // const { data } = await useFetch<AccountModelEntity>('https://api-dev.cando.uz/api/v1/account/me/', {
-    //   headers: {
-    //     Authorization:
-    //       'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzMjYyMDE5LCJpYXQiOjE3NTMxNzU2MTksImp0aSI6IjIwZGU0MzVlNjNmNDRkYzE5YmZmOGQ4ZTA5MjZlZDE2IiwidXNlcl9pZCI6OX0.yTPbfuxYiCynHPkapJIKSjjy4RkidWFO56pLUCE0XuU'
-    //   },
-    //   method: 'get'
-    // })
-    // console.log('data.value', data.value)
-
-    // if (data.value) {
-    //   account.value = data.value
-    // }
   }
 
   const logOut = () => {

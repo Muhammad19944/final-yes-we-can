@@ -28,6 +28,6 @@ watch(files, () => {
       />
     </BaseFormField>
 
-    <UploadAttachment v-model="files" />
+    <!-- <UploadAttachment v-model="files" /> -->
   </div>
 </template>

@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { TabItemEntity } from '~/components/Base/Tabs/BaseTabs.vue'
+import type { ProjectModelResponseEntity } from '~/shared/types/project'
+import type { FetchResponseWrapperEntity } from '~/shared/types/utils'
 
 const route = useRoute()
 const router = useRouter()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
 
 const items = ref<TabItemEntity[]>([
   {
@@ -20,8 +24,14 @@ const items = ref<TabItemEntity[]>([
 ])
 const tab = ref('latest')
 const drawer = ref(false)
+const data = ref<FetchResponseWrapperEntity<ProjectModelResponseEntity>>({
+  count: 0,
+  next: null,
+  previous: null,
+  results: []
+})
 
-const toggleDrawer = async (id: number) => {
+const toggleDrawer = async (id: string) => {
   // Перед открытием дровера
   if (!drawer.value) {
     await router.push({ path: route.fullPath, query: { id } })
@@ -42,6 +52,26 @@ const openDrawer = () => {
     drawer.value = true
   }
 }
+
+const loadProject = async () => {
+  setLoading(true)
+
+  try {
+    const { data: list } = await useFetch(`/api/project/list`)
+
+    if (list.value) {
+      data.value = list.value
+    }
+  } catch (error) {
+    console.error(error)
+  } finally {
+    await sleep()
+    setLoading(false)
+  }
+}
+
+await loadProject()
+
 onMounted(async () => {
   openDrawer()
 })
@@ -61,17 +91,32 @@ onMounted(async () => {
       />
     </div>
 
-    <div class="space-y-3">
-      <template
-        v-for="item in 5"
-        :key="item"
-      >
-        <CardProjectItem
-          :navigations="[]"
-          @click="toggleDrawer(item)"
+    <template v-if="loading">
+      <div class="flex items-center justify-center h-56">
+        <UIcon
+          name="svg-spinners:90-ring-with-bg"
+          class="w-11 h-11 bg-primary-500"
         />
-      </template>
-    </div>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="space-y-3">
+        <template
+          v-for="item in data.results"
+          :key="item.id"
+        >
+          <CardProjectItem
+            :date="item.updated_at"
+            :title="item.title"
+            :description="item.profession ?? `To'ldirilmagan`"
+            :skills="item.technologies"
+            :navigations="[]"
+            @click="toggleDrawer(item.id)"
+          />
+        </template>
+      </div>
+    </template>
 
     <ProjectDrawer v-model="drawer" />
   </div>

@@ -13,6 +13,7 @@ export interface AccountModelEntity {
     visible?: boolean
     level?: string
     technologies?: number[]
+    balance?: string
   }
   phone?: string
   role?: AccountRoleType

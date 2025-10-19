@@ -1,12 +1,16 @@
 <script lang="ts">
 import { formatCurrency } from '~/utils'
-import type { TabItemEntity } from '~/components/Base/Tabs/BaseTabs.vue'
 import type { NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
 import type { FetchResponseWrapperEntity } from '~/shared/types/utils'
-import type { ProjectModelResponseEntity, ProjectCustomerFilterEntity } from '~/shared/types/project'
+import type { ProjectModelResponseEntity, ProjectCustomerFilterEntity, ProjectStatusType } from '~/shared/types/project'
 </script>
 
 <script setup lang="ts">
+const route = useRoute()
+const router = useRouter()
+const { loading, setLoading } = useLoader()
+const { sleep } = useTimeout()
+
 const data = ref<FetchResponseWrapperEntity<ProjectModelResponseEntity>>({
   count: 0,
   next: null,
@@ -17,21 +21,6 @@ const filters = ref<ProjectCustomerFilterEntity>({
   status: 'draft',
   p: 1
 })
-
-const items = ref<TabItemEntity[]>([
-  {
-    label: 'E’lon qilinmagan',
-    value: 'draft'
-  },
-  {
-    label: 'Davom etayotgan',
-    value: 'announce_contract'
-  },
-  {
-    label: 'Tugallangan',
-    value: 'closed'
-  }
-])
 
 const navigations = (item: ProjectModelResponseEntity) => {
   const links: NavigationItemEntity[] = [
@@ -58,29 +47,60 @@ const navigations = (item: ProjectModelResponseEntity) => {
   return links
 }
 
-watch(
-  () => filters.value.status,
-  async (value) => {
-    if (value) {
-      // TODO: status filterni massiv qabul qiladigan qilgandan keyin davom ettiriladi
-      // const split = value.split('_')
+const loadRecentProject = async (query: ProjectCustomerFilterEntity, writeQuery: boolean = true) => {
+  setLoading(true)
 
-      const { data: list } = await useFetch(`/api/project/customer`, {
+  try {
+    // TODO: status filterni massiv qabul qiladigan qilgandan keyin davom ettiriladi
+    // const split = value.split('_')
+    const { data: list } = await useFetch(`/api/project/customer`, {
+      query: {
+        ...filters.value
+      }
+    })
+
+    if (list.value) {
+      data.value = list.value
+    }
+
+    if (writeQuery) {
+      await router.replace({
+        path: route.path,
         query: {
-          ...filters.value,
-          status: value
+          ...query
         }
       })
-
-      if (list.value) {
-        data.value = list.value
-      }
     }
-  },
-  {
-    immediate: true
+  } catch (error) {
+    console.error(error)
+  } finally {
+    await sleep()
+    setLoading(false)
   }
-)
+}
+
+const handleTabClick = async (value: ProjectStatusType) => {
+  filters.value = {
+    status: value,
+    p: 1
+  }
+
+  await loadRecentProject(filters.value)
+}
+
+onMounted(async () => {
+  if (Object.keys(route.query).length) {
+    filters.value = {
+      status: route.query.status as ProjectStatusType,
+      p: parseInt(route.query.p as string)
+    }
+
+    await loadRecentProject(filters.value)
+    return
+  }
+
+  await loadRecentProject(filters.value, false)
+})
 </script>
 
 <template>
@@ -93,26 +113,44 @@ watch(
         color="text-(--color-greyscale-900)"
       />
 
-      <BaseTabs
-        v-model="filters.status"
-        :items="items"
-        color="white"
-        size="sm"
-        :ui="{
-          root: 'w-sm'
-        }"
-      />
+      <ProfileCustomerRecentFilter @emit:change="handleTabClick" />
     </div>
 
     <div class="space-y-3">
-      <template v-if="filters.status === 'draft'">
-        <template
-          v-for="item in data.results"
-          :key="item.id"
-        >
-          <NuxtLinkLocale
-            :to="`/project/show/${item.id}/${item.step}/`"
-            class="block"
+      <template v-if="loading">
+        <div class="flex items-center justify-center h-56">
+          <UIcon
+            name="svg-spinners:90-ring-with-bg"
+            class="w-11 h-11 bg-primary-500"
+          />
+        </div>
+      </template>
+
+      <template v-else>
+        <template v-if="filters.status === 'draft'">
+          <template
+            v-for="item in data.results"
+            :key="item.id"
+          >
+            <NuxtLinkLocale
+              :to="`/project/show/${item.id}/${item.step}/`"
+              class="block"
+            >
+              <CardProjectItem
+                :date="item.updated_at"
+                :title="item.title"
+                :description="item.profession ?? `To'ldirilmagan`"
+                :skills="item.technologies"
+                :navigations="navigations(item)"
+              />
+            </NuxtLinkLocale>
+          </template>
+        </template>
+
+        <template v-else-if="filters.status === 'announce'">
+          <template
+            v-for="item in data.results"
+            :key="item.id"
           >
             <CardProjectItem
               :date="item.updated_at"
@@ -121,16 +159,12 @@ watch(
               :skills="item.technologies"
               :navigations="navigations(item)"
             />
-          </NuxtLinkLocale>
+          </template>
         </template>
-      </template>
 
-      <template v-else-if="filters.status === 'announce_contract'">
-        <!-- <CardProjectItem :navigations="navigations(item)" /> -->
-      </template>
-
-      <template v-else>
-        <!-- <CardProjectItem :navigations="navigations(item)" /> -->
+        <template v-else>
+          <!-- <CardProjectItem :navigations="navigations(item)" /> -->
+        </template>
       </template>
     </div>
   </div>

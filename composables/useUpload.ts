@@ -24,7 +24,7 @@ export const useUpload = () => {
     for (const file of files) {
       formData.append('file', file)
 
-      const data = await useClientFetch<UploadResponseEntity>('/feature/upload/', {
+      const data = await useClientFetch<UploadResponseEntity>('/api/feature/upload/', {
         method: 'post',
         body: file
       })
