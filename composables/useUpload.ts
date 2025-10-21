@@ -23,13 +23,13 @@ export const useUpload = () => {
 
     for (const file of files) {
       console.log('file', file)
-      formData.append('file[]', file)
+      formData.append('file', file)
 
       const data = await $fetch<UploadResponseEntity>('https://api-dev.cando.uz/api/v1/feature/upload/', {
         headers: {
           Accept: 'application/json',
-          'Accept-Language': 'uz',
-          'Content-Type': 'multipart/form-data'
+          'Accept-Language': 'uz'
+          // 'Content-Type': 'multipart/form-data'
           //   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYxMTExODg2LCJpYXQiOjE3NjEwMjU0ODYsImp0aSI6IjkxOTJhOWU0ODcyMDRjODk4N2UxZWNlNjBmYWQwZThhIiwidXNlcl9pZCI6MTB9.ycPJ1LvgqIZqMK8fiYzIqgKq4AKd9KmXM3Yck8PLp5U`
         },
         method: 'post',
