@@ -43,7 +43,7 @@ const defineGeneralItems = computed<NavigationItemEntity[]>(() => {
     }
   ]
 })
-const items = computed<NavigationItemEntity[]>(() => {
+const defineProjectSizeItems = computed<NavigationItemEntity[]>(() => {
   return [
     {
       label: currentSize(projectStore.projectRequest.size)?.label ?? '',
@@ -145,7 +145,7 @@ const publish = async () => {
 
         <CardProjectSheet title="Loyiha hajmi">
           <NavigationProjectMeta
-            :items="items"
+            :items="defineProjectSizeItems"
             :compact="false"
             separator="divider"
             :ui="{

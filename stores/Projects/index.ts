@@ -12,7 +12,8 @@ const projectModel = {
   step: '',
   location: '',
   technologies: [],
-  files: []
+  files: [],
+  owner_id: 0
 }
 
 export const useProjectStore = defineStore('useProjectStore', () => {

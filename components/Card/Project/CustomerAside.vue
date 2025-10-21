@@ -1,13 +1,21 @@
-<script setup lang="ts">
+<script lang="ts">
 import { useClipboard } from '@vueuse/core'
+import { useAccountStore } from '~/stores/account'
+</script>
 
-const link = ref('npx nuxt module add ui')
-
+<script setup lang="ts">
 const { copy, copied } = useClipboard()
+const accountStore = useAccountStore()
+
+const link = ref()
 
 const copyLink = (link: string) => {
   copy(link)
 }
+
+onMounted(() => {
+  link.value = `${window.location.origin}/project/detail?id=${useRoute().query.id}`
+})
 </script>
 
 <template>
@@ -61,7 +69,7 @@ const copyLink = (link: string) => {
           />
 
           <BaseHeading
-            text="55 ta"
+            :text="`${accountStore.account.info?.connection} ta`"
             weight="medium"
             :ui="{
               root: 'text-(--color-greyscale-900)'
@@ -98,7 +106,11 @@ const copyLink = (link: string) => {
         <div class="space-y-3">
           <BaseAvatarLabeled
             size="lg"
-            label="Abdullayev Farhod"
+            :label="`${
+              accountStore.accountById.last_name && accountStore.accountById.first_name
+                ? accountStore.accountById.last_name + ' ' + accountStore.accountById.first_name
+                : accountStore.accountById.username
+            }`"
             src="https://github.com/benjamincanac.png"
             :ui="{
               root: 'items-center justify-between',
@@ -107,7 +119,7 @@ const copyLink = (link: string) => {
           >
             <template #subLabel>
               <BaseHeading
-                text="Andijon sh, Andijon vil."
+                text="Toshkent shahar"
                 weight="medium"
                 :ui="{
                   root: 'text-(--color-greyscale-500)'

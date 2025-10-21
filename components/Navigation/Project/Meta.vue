@@ -10,6 +10,7 @@ export interface NavigationItemEntity {
     icon?: string
     description?: string
     link?: string
+    item?: string
   }
 }
 
@@ -36,6 +37,7 @@ withDefaults(defineProps<NavigationProjectMetaEntity>(), {
     :ui="{
       root: ui?.root,
       separator: ui?.separator,
+      item: ui?.item,
       list: 'gap-2',
       link: 'gap-1'
     }"

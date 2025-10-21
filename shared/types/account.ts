@@ -14,6 +14,7 @@ export interface AccountModelEntity {
     level?: string
     technologies?: number[]
     balance?: string
+    connection?: number
   }
   phone?: string
   role?: AccountRoleType

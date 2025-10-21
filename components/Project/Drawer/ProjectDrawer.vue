@@ -1,4 +1,7 @@
 <script lang="ts">
+import { useProjectStore } from '~/stores/Projects'
+import { useAccountStore } from '~/stores/account'
+
 interface ProjectDrawerEntity {
   modelValue?: boolean
 }
@@ -6,8 +9,26 @@ interface ProjectDrawerEntity {
 
 <script setup lang="ts">
 const props = withDefaults(defineProps<ProjectDrawerEntity>(), {})
-
 const model = useModel(props, 'modelValue')
+
+const route = useRoute()
+const { locale } = useI18n()
+const projectStore = useProjectStore()
+const accountStore = useAccountStore()
+
+watch(
+  () => model.value,
+  (value) => {
+    // Когда drawer закрывается сбрасываем данные проекта
+    if (!value) {
+      projectStore.actionProjectResetModel()
+      accountStore.actionResetAccountByIdModel()
+    }
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <template>
@@ -16,7 +37,8 @@ const model = useModel(props, 'modelValue')
     :close="false"
     :ui="{
       content: 'max-w-[1022px] w-full',
-      header: 'justify-between'
+      header: 'justify-between',
+      body: 'flex flex-col bg-greyscale-50'
     }"
   >
     <template #header>
@@ -28,10 +50,11 @@ const model = useModel(props, 'modelValue')
         :ui="{
           base: 'cursor-pointer p-0'
         }"
+        @click="model = false"
       />
 
       <NuxtLinkLocale
-        to="/"
+        :to="`/project/detail?id=${route.query.id}`"
         class="flex"
       >
         <BaseButton
@@ -51,6 +74,22 @@ const model = useModel(props, 'modelValue')
           />
         </BaseButton>
       </NuxtLinkLocale>
+    </template>
+
+    <template #body>
+      <WidgetProjectDetail />
+    </template>
+
+    <template #footer>
+      <div class="flex justify-end gap-3 w-full">
+        <BaseButton
+          primary-gradient
+          variant="solid"
+          :to="`/${locale}/project/proposal/send/${route.query.id}`"
+        >
+          Taklif yuborish
+        </BaseButton>
+      </div>
     </template>
   </BaseDrawer>
 </template>

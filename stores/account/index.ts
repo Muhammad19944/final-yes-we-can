@@ -1,6 +1,6 @@
 import type { AccountModelEntity } from '~/shared/types/account'
 
-const defaultAccount = {
+export const defaultAccount = {
   username: undefined,
   first_name: undefined,
   last_name: undefined,
@@ -12,7 +12,8 @@ const defaultAccount = {
     visible: true,
     level: undefined,
     technologies: [],
-    balance: 0
+    balance: 0,
+    connection: 0
   },
   phone: undefined,
   role: undefined
@@ -20,6 +21,7 @@ const defaultAccount = {
 
 export const useAccountStore = defineStore('useAccountStore', () => {
   const account = ref<AccountModelEntity>(JSON.parse(JSON.stringify(defaultAccount)))
+  const accountById = ref<AccountModelEntity>(JSON.parse(JSON.stringify(defaultAccount)))
 
   const isLoggedIn = computed(() => account.value.email)
   const isCustomer = computed(() => account.value.role === 'customer')
@@ -40,17 +42,41 @@ export const useAccountStore = defineStore('useAccountStore', () => {
     }
   }
 
+  const fetchGetAccountById = async (id: number = 0) => {
+    const { data } = await useFetch<AccountModelEntity>(`/api/account/account/by/${id}`, { method: 'get' })
+
+    if (data.value) {
+      accountById.value = data.value
+    }
+  }
+
+  const actionResetAccountByIdModel = () => {
+    accountById.value = JSON.parse(JSON.stringify(defaultAccount))
+  }
+
   const logOut = () => {
     account.value = JSON.parse(JSON.stringify(defaultAccount))
   }
 
+  const actionAccountName = (model: AccountModelEntity) => {
+    if (model.last_name || model.first_name) {
+      return `${model.first_name} ${model.last_name}`
+    }
+
+    return model.username
+  }
+
   return {
     account,
+    accountById,
     isLoggedIn,
     isCustomer,
     isDeveloper,
     accountName,
     getAccount,
-    logOut
+    fetchGetAccountById,
+    actionResetAccountByIdModel,
+    logOut,
+    actionAccountName
   }
 })

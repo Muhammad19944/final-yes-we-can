@@ -35,6 +35,7 @@ export interface ProjectModelRequestEntity extends ProjectBaseEntity {
   location?: number
   technologies: OptionEntity[]
   files?: number[]
+  owner_id?: number
 }
 
 export interface ProjectModelResponseEntity extends ProjectBaseEntity {
