@@ -8,3 +8,5 @@ export const Token = {
 export const Locale = 'Locale'
 
 export const ProjectId = 'ProjectId'
+
+export const PLATFORM_COMMISSION_RATE = 0.1

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useUpload } from '~/composables/useUpload'
-import type { MockupsEntity } from '~/composables/useUpload'
+import type { UploadResponseEntity } from '~/composables/useUpload'
 import type { BaseUploadEntity } from '~/components/Base/Upload/BaseUpload.vue'
 
 interface AttachmentEntity extends BaseUploadEntity {
@@ -16,19 +16,15 @@ interface AttachmentEntity extends BaseUploadEntity {
 
 <script setup lang="ts">
 const props = defineProps<AttachmentEntity>()
+const emit = defineEmits(['update:modelValue', 'emit:success-upload', 'emit:remove-item'])
 const model = useModel(props, 'modelValue')
-const { upload, isUploadFile, fileToFileList } = useUpload()
+const { isUploadFile } = useUpload()
 
-const loader = ref(false)
+const removeItem = (index: number) => {
+  if (!model.value) return
 
-const uploadMock = async (file: MockupsEntity) => {
-  loader.value = true
-
-  if (file.file) {
-    const files = fileToFileList([file.file])
-
-    await upload(files)
-  }
+  model?.value.splice(index, 1)
+  emit('emit:remove-item', index)
 }
 </script>
 
@@ -84,35 +80,18 @@ const uploadMock = async (file: MockupsEntity) => {
             :key="index"
           >
             <template v-if="isUploadFile(file)">
-              <pre>{{ file }}</pre>
+              <!-- <pre>{{ file }}</pre> -->
             </template>
 
             <template v-else>
               <UploadItem
+                :file="file"
                 :image="file.path"
                 :title="file.file?.name"
                 :size="file.file?.size"
-                @emit:close="() => model?.splice(index, 1)"
-              >
-                <template #actions>
-                  <BaseTooltip
-                    text="Загрузить файл"
-                    :content="{ side: 'top', sideOffset: -2 }"
-                  >
-                    <BaseButton
-                      size="lg"
-                      variant="link"
-                      :icon="loader ? 'svg-spinners:90-ring-with-bg' : 'solar:cloud-upload-outline'"
-                      square
-                      rounded
-                      :ui="{
-                        base: 'cursor-pointer'
-                      }"
-                      @click="uploadMock(file)"
-                    />
-                  </BaseTooltip>
-                </template>
-              </UploadItem>
+                @emit:close="() => removeItem(index)"
+                @emit:success-upload="(collection: UploadResponseEntity[]) => emit('emit:success-upload', collection)"
+              />
             </template>
           </template>
         </div>

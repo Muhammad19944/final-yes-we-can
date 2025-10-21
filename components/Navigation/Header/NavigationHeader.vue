@@ -30,7 +30,7 @@ const defineContentWidth = computed(() => {
     <div class="w-full fixed top-0 bg-white z-10">
       <BaseContainer>
         <div
-          class="flex items-center justify-between h-16"
+          class="flex items-center justify-between gap-20 h-16"
           :class="[defineContentWidth, ui?.content]"
         >
           <nuxt-link-locale
@@ -45,7 +45,14 @@ const defineContentWidth = computed(() => {
           </nuxt-link-locale>
 
           <template v-if="layout !== 'auth'">
-            <div class="flex items-center justify-center flex-1 gap-6" />
+            <div class="flex items-center flex-1 gap-6">
+              <nuxt-link-locale
+                to="/project/proposal/my"
+                class="flex items-center transition-colors text-greyscale-900 h-10 hover:text-primary-500"
+              >
+                Mening takliflarim
+              </nuxt-link-locale>
+            </div>
           </template>
 
           <div class="flex items-center gap-4">

@@ -3,15 +3,28 @@ import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import type { NavigationItemEntity } from '~/components/Navigation/Project/Meta.vue'
 import { useProjectStore } from '~/stores/Projects'
+import { PLATFORM_COMMISSION_RATE } from '~/shared/const'
+import type { UploadResponseEntity } from '~/composables/useUpload'
+import { clearSymbols } from '~/utils'
 
 const schema = z.object({
-  cover_letter: z.string({ message: 'Cover letter yozilishi shart' })
+  job: z.string().optional(),
+  price: z.string().optional(),
+  duration: z.object({
+    label: z.string(),
+    value: z.string()
+  }),
+  cover_letter: z.string({ message: 'Cover letter yozilishi shart' }),
+  files: z.array(z.any()).optional(),
+  step: z.string().optional()
 })
 
 type Schema = z.output<typeof schema>
 </script>
 
 <script setup lang="ts">
+const { $toast } = useNuxtApp()
+
 definePageMeta({
   layout: 'footerless'
 })
@@ -20,12 +33,19 @@ const route = useRoute()
 const router = useRouter()
 const projectStore = useProjectStore()
 const { loading, setLoading } = useLoader()
+const { loading: formLoading, setLoading: setFormLoading } = useLoader()
 const { sleep } = useTimeout()
 const { currentLevel } = useProjectMeta()
 
 const state = reactive<Partial<Schema>>({
-  cover_letter: undefined
+  job: undefined,
+  price: undefined,
+  duration: undefined,
+  cover_letter: undefined,
+  files: [],
+  step: 'submitted'
 })
+const mockFiles = ref<UploadResponseEntity[]>([])
 
 const defineGeneralItems = computed<NavigationItemEntity[]>(() => {
   return [
@@ -57,6 +77,23 @@ const defineGeneralItems = computed<NavigationItemEntity[]>(() => {
   ]
 })
 
+const price = computed({
+  get: () => formatCurrency(Number(projectStore.projectRequest.price) || 0),
+  set: (val: string) => {
+    projectStore.projectRequest.price = val.replace(/\s/g, '')
+  }
+})
+
+const planformCommissionAmount = computed(() => {
+  const price = Number(projectStore.projectRequest.price) || 0
+  return Math.round(price * PLATFORM_COMMISSION_RATE)
+})
+
+const freelancerReceiveAmount = computed(() => {
+  const price = Number(projectStore.projectRequest.price) || 0
+  return price - planformCommissionAmount.value
+})
+
 setLoading(true)
 
 const getProjectById = async () => {
@@ -70,17 +107,44 @@ const getProjectById = async () => {
   }
 }
 
-onMounted(async () => {
-  await getProjectById()
-})
+const sendPropsal = async (event: FormSubmitEvent<Schema>) => {
+  setFormLoading(true)
 
-const submit = (event: FormSubmitEvent<Schema>) => {
-  console.log('event', event.data)
+  try {
+    const model = {
+      ...event.data,
+      job: route.params.slug as string,
+      price: clearSymbols(price.value),
+      duration: '02 10:05:33',
+      // duration: event.data.duration?.value,
+      files: mockFiles.value.filter((file) => file.id).map((file) => file.id)
+    }
+
+    await useClientFetch('/api/account/account/propsal/send', {
+      method: 'post',
+      body: model
+    })
+
+    $toast({
+      title: `Ish uchun taklif yuborildi`,
+      icon: 'solar:check-circle-outline'
+    })
+  } catch (error) {
+    console.log(error)
+  } finally {
+    await sleep()
+    setFormLoading(false)
+  }
+  // console.log('event', event.data)
 }
 
 const prevStep = () => {
   router.go(-1)
 }
+
+onMounted(async () => {
+  await getProjectById()
+})
 </script>
 
 <template>
@@ -91,7 +155,7 @@ const prevStep = () => {
       :ui="{
         root: 'flex flex-col flex-1'
       }"
-      @submit="submit"
+      @submit="sendPropsal"
     >
       <div class="flex flex-col flex-1 max-w-[1035px] w-full mx-auto my-14">
         <template v-if="loading">
@@ -190,7 +254,10 @@ const prevStep = () => {
                       </div>
 
                       <div class="max-w-[220px] w-full">
-                        <BaseFormInput size="2xl">
+                        <BaseFormInput
+                          v-model="price"
+                          size="2xl"
+                        >
                           <template #trailing>
                             <BaseHeading
                               text="UZS"
@@ -218,7 +285,7 @@ const prevStep = () => {
                             }
                           }"
                           :description="{
-                            text: `10% Freelancer xizmati toʻlovi`,
+                            text: `${PLATFORM_COMMISSION_RATE * 100}% Platforma xizmati toʻlovi`,
                             weight: 'medium',
                             color: 'text-(--color-greyscale-500)'
                           }"
@@ -227,6 +294,7 @@ const prevStep = () => {
 
                       <div class="max-w-[220px] w-full">
                         <BaseFormInput
+                          :value="formatCurrency(planformCommissionAmount)"
                           size="2xl"
                           disabled
                         >
@@ -265,7 +333,11 @@ const prevStep = () => {
                       </div>
 
                       <div class="max-w-[220px] w-full">
-                        <BaseFormInput size="2xl">
+                        <BaseFormInput
+                          :value="formatCurrency(freelancerReceiveAmount)"
+                          size="2xl"
+                          disabled
+                        >
                           <template #trailing>
                             <BaseHeading
                               text="UZS"
@@ -316,9 +388,22 @@ const prevStep = () => {
                 level="h6"
                 :card="false"
               >
-                <BaseFormField label="Bu loyiha qancha vaqt talab qiladi?">
+                <BaseFormField
+                  label="Bu loyiha qancha vaqt talab qiladi?"
+                  required
+                  name="duration"
+                >
                   <div class="max-w-[325px] w-full">
+                    <!-- TODO: items static keyinchalik dynamic qilish kerak -->
                     <BaseFormSelect
+                      v-model="state.duration"
+                      :items="[
+                        { label: '1 hafta', value: '1 hafta' },
+                        { label: '2 hafta', value: '2 hafta' },
+                        { label: '1 oy', value: '1 oy' },
+                        { label: '2 oy', value: '2 oy' },
+                        { label: '3 oy', value: '3 oy' }
+                      ]"
                       size="2xl"
                       placeholder="Muddatni tanlang"
                       :ui="{
@@ -351,9 +436,15 @@ const prevStep = () => {
                   />
                 </BaseFormField>
 
+                <!-- TODO: Remove item funksionalni tog'irlash kerak -->
                 <UploadAttachment
+                  v-model="mockFiles"
                   center
                   reverse
+                  @emit:remove-item="(index: number) => {
+                    mockFiles.splice(index, 1)
+                  }"
+                  @emit:success-upload="(collection: UploadResponseEntity[]) => mockFiles.push(...collection)"
                 />
               </CardProjectSheet>
             </div>
@@ -386,7 +477,8 @@ const prevStep = () => {
           text: 'Orqaga'
         }"
         :next="{
-          text: 'Yuborish'
+          text: 'Yuborish',
+          loading: formLoading
         }"
         :ui="{
           content: 'max-w-[1035px]'

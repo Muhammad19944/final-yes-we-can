@@ -1,4 +1,6 @@
 <script lang="ts">
+import { useAccountStore } from '~/stores/account'
+
 interface AlerConnectionEntity {
   showConnectionText?: boolean
 }
@@ -6,6 +8,8 @@ interface AlerConnectionEntity {
 
 <script setup lang="ts">
 defineProps<AlerConnectionEntity>()
+
+const accountStore = useAccountStore()
 </script>
 
 <template>
@@ -30,7 +34,7 @@ defineProps<AlerConnectionEntity>()
           color="text-[var(--color-greyscale-600)]"
         />
         <BaseHeading
-          text="36 ta"
+          :text="`${accountStore.account.info?.connection} ta`"
           weight="semi"
           color="text-[var(--color-greyscale-900)]"
         />

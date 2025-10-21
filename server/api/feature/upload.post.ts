@@ -11,7 +11,7 @@ export interface UploadResponseEntity {
 
 export default defineEventHandler(async (event) => {
   const http = useServerHttp(event)
-  const body = await readMultipartFormData(event)
+  const body = await readBody(event)
 
   return await http<UploadResponseEntity>(`feature/upload/`, {
     method: 'post',
